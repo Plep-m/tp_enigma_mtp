@@ -7,6 +7,7 @@ export type AdminModel = {
 export type Activity = {
   id: number;
   title: string;
+  description: string;
   uri: string;
   etapes: Etape[];
 };
@@ -23,6 +24,7 @@ export type Etape = {
 export const createBlankActivity = (): Activity => ({
   id: Date.now(),
   title: '',
+  description: '',
   uri: '',
   etapes: []
 });

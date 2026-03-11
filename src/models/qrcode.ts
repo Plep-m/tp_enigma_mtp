@@ -12,11 +12,11 @@ export type QRCodeModel = {
 const KEY_MAP: Record<string, string> = {
   id: 'i',
   title: 't',
+  description: 'ds',
   uri: 'u',
   etapes: 'e',
   titre: 'tt',
   poi: 'p',
-  description: 'd',
   condition_victoire: 'c',
   reponse: 'r',
   radius: 'rd'

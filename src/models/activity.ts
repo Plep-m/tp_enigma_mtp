@@ -10,6 +10,7 @@ export type Etape = {
 export type Activity = {
   id: number;
   title: string;
+  description: string;
   uri: string;
   etapes: Etape[];
 };
