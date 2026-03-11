@@ -6,8 +6,13 @@
 
 ## Fonctionnalités clés
 
+- Gérer son profil et consulter ses statistiques (nombre de lieux visités, distance la plus longue parcourue, etc.)
+
 ## Installation et lancement
 
 ## Architecture
 
 ## Tableau de répartition des tâches
+
+Navid :
+- Profil utilisateur
