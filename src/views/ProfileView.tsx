@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ProfileModel } from '../models/profile';
 import { profileFields } from "../components/profileFields";
 
-type Props = {profile : ProfileModel | null}
+type Props = {profile : ProfileModel | null};
 
 const ProfileView: React.FC<Props> = (model) => {
 
