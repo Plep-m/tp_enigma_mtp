@@ -1,9 +1,13 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ProfileModel } from '../models/profile';
+import { profileFields } from "../components/profileFields";
 
+type Props = {profile : ProfileModel | null}
 
-const ProfileView: React.FC = () => {
+const ProfileView: React.FC<Props> = (model) => {
+
     return (
         <SafeAreaView className="flex-1 bg-white">
             {/* Header */}
@@ -16,10 +20,16 @@ const ProfileView: React.FC = () => {
             </TouchableOpacity>
           </View> 
            
-            
+           {!model.profile ? (
+
+            <View className="flex-1 justify-center items-center">
+              <Text>Chargement...</Text>
+            </View>
+            ) : ( 
+                <>
             <View className="mt-6 mb-6 items-center">
             <Image
-                source={{uri: 'https://randomuser.me/api/portraits/men/10.jpg'}}
+                source={{uri: model.profile.profile_pic_url}}
                 className="w-24 h-24 rounded-full"
                 onError={() => console.warn('Image non chargée')}
             />
@@ -55,20 +65,19 @@ const ProfileView: React.FC = () => {
         </View>
         {/* Champs utilisateur avec bouton ✏️ */}
             <View className="w-11/12 mx-auto space-y-4">
-                {[
-            { label: "Nom d'utilisateur", value: "[username]" },
-            { label: "Numéro de téléphone", value: "[phone number]" },
-            { label: "Sexe", value: "[gender]" },
-            { label: "Âge", value: "[age]" },
-          ].map((field, idx) => (
-            <View key={idx} className="flex-row justify-between items-center border-b border-gray-200 py-2">
-              <Text className="text-lg text-gray-700">{field.label}: <Text className="text-sky-400">{field.value}</Text></Text>
-              <TouchableOpacity onPress={() => console.log(`Modifier ${field.label}`)}>
-                <Text className="text-xl">✏️</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
-            </View>
+                {profileFields.map((profileField) => (
+                    <View key={profileField.key} className="flex-row justify-between items-center border-b border-gray-200 py-2"> 
+                    <Text className="text-lg text-gray-700">{profileField.label} : 
+                     {model.profile ? (<><Text className="text-sky-400"> {model.profile[profileField.key]}</Text></>) : <></>}
+                    </Text>
+                    <TouchableOpacity onPress={() => console.log(`Modifier ${profileField.label}`)}>
+                    <Text className="text-xl">✏️</Text>
+                    </TouchableOpacity>
+                 </View>
+          ))};
+    </View>
+    </>
+  )}
         </SafeAreaView>
       );
 };

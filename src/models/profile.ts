@@ -1,0 +1,15 @@
+import profileData from '../data/profile.json';
+
+export type ProfileModel = {
+  id: number;
+  profile_pic_url: string;
+  username: string;
+  phone_number: string;
+  gender: string;
+  age: number;
+};
+
+export const getProfile = (): ProfileModel => {
+    return profileData;
+}
+
