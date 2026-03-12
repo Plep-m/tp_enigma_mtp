@@ -3,7 +3,9 @@ global.Buffer = Buffer;
 
 import './global.css';
 import AdminController from './src/controllers/AdminController';
+import ProfileController from './src/controllers/ProfileController';
 
 export default function App() {
-  return <AdminController />;
+  return <ProfileController />;
 }
+
