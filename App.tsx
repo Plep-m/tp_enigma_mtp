@@ -2,8 +2,8 @@ import { Buffer } from 'buffer';
 global.Buffer = Buffer;
 
 import './global.css';
-import AdminController from './src/controllers/AdminController';
+import Navigator from './src/navigation/_layout';
 
 export default function App() {
-  return <AdminController />;
+  return <Navigator />;
 }
