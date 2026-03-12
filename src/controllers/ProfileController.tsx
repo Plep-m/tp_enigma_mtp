@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import ProfileView from '../views/ProfileView';
 import { ProfileModel, getProfile } from '../models/profile';
@@ -23,15 +22,15 @@ const ProfileController: React.FC = () => {
     };
     
     return(
-        <SafeAreaProvider>
-            <ProfileView 
+        <>
+            <ProfileView
             profile={profile}
             editingField={editingField}
             setEditingField={setEditingField}
             handleUpdateField={handleUpdateField}
             />
             <StatusBar style="dark" />
-        </SafeAreaProvider>
+        </>
     );
 };
 
