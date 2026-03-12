@@ -4,11 +4,20 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 type ScreenMap = Record<string, React.ComponentType>;
 
-type NavigationContextType<T extends ScreenMap> = {
-  navigate: (screen: keyof T & string) => void;
+type NavigationContextType = {
+  navigate: (screen: string, params?: any) => void;
   goBack: () => void;
   canGoBack: boolean;
+  params?: any;
 };
+
+const NavigationContext = createContext<NavigationContextType | null>(null);
+
+export function useAppNavigation(): NavigationContextType {
+  const ctx = useContext(NavigationContext);
+  if (!ctx) throw new Error('useAppNavigation must be used inside Navigator');
+  return ctx;
+}
 
 export function createNavigator<T extends ScreenMap>(
   screens: T,
@@ -16,21 +25,15 @@ export function createNavigator<T extends ScreenMap>(
 ) {
   type ScreenName = keyof T & string;
 
-  const NavigationContext = createContext<NavigationContextType<T> | null>(null);
-
-  function useAppNavigation(): NavigationContextType<T> {
-    const ctx = useContext(NavigationContext);
-    if (!ctx) throw new Error('useAppNavigation must be used inside Navigator');
-    return ctx;
-  }
-
   function Navigator() {
-    const [stack, setStack] = useState<ScreenName[]>([initialScreen]);
+    const [stack, setStack] = useState<{ name: ScreenName; params?: any }[]>([
+      { name: initialScreen },
+    ]);
 
-    const navigate = useCallback((screen: ScreenName) => {
+    const navigate = useCallback((screen: ScreenName, params?: any) => {
       setStack((prev) => {
-        if (prev[prev.length - 1] === screen) return prev;
-        return [...prev, screen];
+        if (prev[prev.length - 1]?.name === screen) return prev;
+        return [...prev, { name: screen, params }];
       });
     }, []);
 
@@ -39,7 +42,8 @@ export function createNavigator<T extends ScreenMap>(
     }, []);
 
     const canGoBack = stack.length > 1;
-    const currentScreen = stack[stack.length - 1];
+    const currentStackItem = stack[stack.length - 1];
+    const currentScreen = currentStackItem?.name;
 
     useEffect(() => {
       const sub = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -52,15 +56,19 @@ export function createNavigator<T extends ScreenMap>(
       return () => sub.remove();
     }, [canGoBack, goBack]);
 
+    const navigateContext = useCallback((screen: string, params?: any) => {
+        navigate(screen as ScreenName, params);
+    }, [navigate]);
+
     return (
-      <NavigationContext.Provider value={{ navigate, goBack, canGoBack }}>
+      <NavigationContext.Provider value={{ navigate: navigateContext, goBack, canGoBack, params: currentStackItem?.params }}>
         <SafeAreaProvider>
           {(Object.keys(screens) as ScreenName[]).map((screen) => (
             <View
               key={screen}
               style={{ flex: 1, display: currentScreen === screen ? 'flex' : 'none' }}
             >
-              {React.createElement(screens[screen])}
+              {React.createElement(screens[screen], currentStackItem?.name === screen ? currentStackItem?.params : {})}
             </View>
           ))}
         </SafeAreaProvider>
@@ -68,5 +76,5 @@ export function createNavigator<T extends ScreenMap>(
     );
   }
 
-  return { Navigator, useAppNavigation };
+  return { Navigator };
 }

@@ -1,11 +1,18 @@
 import React, { useRef } from 'react';
-import { View, Text, ScrollView, TextInput, Pressable, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
+import { View, ScrollView, KeyboardAvoidingView, Platform, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import QRCode from 'react-native-qrcode-svg';
-import { impactAsync, ImpactFeedbackStyle, notificationAsync, NotificationFeedbackType } from 'expo-haptics';
 import QRScanner from '../components/QRScanner';
-import { Activity, Etape } from '../models/activity';
-import { useAppNavigation } from '../navigation/_layout';
+import { Activity, Step, Mission } from '../models/activity';
+import { useAppNavigation } from '../navigation/StackNavigator';
+import { impactAsync, ImpactFeedbackStyle, notificationAsync, NotificationFeedbackType } from 'expo-haptics';
+import { useMissionCardKeyboardScroll } from '../hooks/useMissionCardKeyboardScroll';
+import {
+  AdminHeader,
+  AdminActivityFields,
+  AdminStepsSection,
+  AdminQRSection,
+  AdminQRControls
+} from '../components/admin';
 
 type Props = {
   activity: Activity | null;
@@ -31,8 +38,13 @@ const AdminView: React.FC<Props> = ({
   onCreateBlank,
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
-  const etapeRefs = useRef<{ [key: number]: View | null }>({});
+  const stepRefs = useRef<{ [key: number]: View | null }>({});
+  const missionCardRefs = useRef<{ [key: string]: View | null }>({});
   const { goBack, canGoBack } = useAppNavigation();
+  const { handleMissionFocus, handleScroll } = useMissionCardKeyboardScroll(
+    scrollViewRef,
+    missionCardRefs
+  );
 
   const hapticLight = () => impactAsync(ImpactFeedbackStyle.Light);
   const hapticMedium = () => impactAsync(ImpactFeedbackStyle.Medium);
@@ -42,248 +54,125 @@ const AdminView: React.FC<Props> = ({
     return <QRScanner onScan={onScan} onClose={onCloseScanner} />;
   }
 
-  const updateEtape = (index: number, updatedEtape: Etape) => {
+  const updateStep = (stepIndex: number, updatedStep: Step) => {
     if (!activity) return;
-    const newEtapes = [...activity.etapes];
-    newEtapes[index] = updatedEtape;
-    onUpdateActivity({ ...activity, etapes: newEtapes });
+    const newSteps = [...activity.steps];
+    newSteps[stepIndex] = updatedStep;
+    onUpdateActivity({ ...activity, steps: newSteps });
   };
 
-  const addEtape = () => {
+  const addStep = () => {
     if (!activity) return;
-    const newEtape: Etape = {
-      titre: '',
-      poi: '',
-      description: '',
-      condition_victoire: '1',
-      reponse: '',
-      radius: 50
+    onUpdateActivity({
+      ...activity,
+      steps: [...activity.steps, {
+        id: Date.now(),
+        description: '',
+        poiLat: 0,
+        poiLng: 0,
+        radius: 50,
+        missions: []
+      }]
+    });
+  };
+
+  const removeStep = (stepIndex: number) => {
+    if (!activity) return;
+    onUpdateActivity({
+      ...activity,
+      steps: activity.steps.filter((_, i) => i !== stepIndex)
+    });
+  };
+
+  const updateMission = (stepIndex: number, missionIndex: number, updatedMission: Mission) => {
+    if (!activity) return;
+    const newSteps = [...activity.steps];
+    const newMissions = [...newSteps[stepIndex].missions];
+    newMissions[missionIndex] = updatedMission;
+    newSteps[stepIndex] = { ...newSteps[stepIndex], missions: newMissions };
+    onUpdateActivity({ ...activity, steps: newSteps });
+  };
+
+  const addMission = (stepIndex: number) => {
+    if (!activity) return;
+    const newSteps = [...activity.steps];
+    newSteps[stepIndex] = {
+      ...newSteps[stepIndex],
+      missions: [...newSteps[stepIndex].missions, {
+        id: Date.now(),
+        type: 'photo',
+        instruction: '',
+        question: '',
+        expectedAnswer: ''
+      }]
     };
-    onUpdateActivity({ ...activity, etapes: [...activity.etapes, newEtape] });
+    onUpdateActivity({ ...activity, steps: newSteps });
   };
 
-  const removeEtape = (index: number) => {
+  const removeMission = (stepIndex: number, missionIndex: number) => {
     if (!activity) return;
-    const newEtapes = activity.etapes.filter((_, i) => i !== index);
-    onUpdateActivity({ ...activity, etapes: newEtapes });
-  };
-
-  const scrollToEtape = (index: number) => {
-    const etapeView = etapeRefs.current[index];
-    if (etapeView && scrollViewRef.current) {
-      etapeView.measureLayout(
-        scrollViewRef.current as any,
-        (x, y) => {
-          scrollViewRef.current?.scrollTo({ y: y - 100, animated: true });
-        },
-        () => {}
-      );
-    }
-  };
-
-  const handleEtapeFocus = (index: number) => {
-    hapticLight();
-    setTimeout(() => scrollToEtape(index), 150);
+    const newSteps = [...activity.steps];
+    newSteps[stepIndex] = {
+      ...newSteps[stepIndex],
+      missions: newSteps[stepIndex].missions.filter((_, i) => i !== missionIndex)
+    };
+    onUpdateActivity({ ...activity, steps: newSteps });
   };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      {/* Header */}
-      <View className="flex-row items-center px-4 py-3 border-b border-gray-200">
-        {canGoBack ? (
-          <TouchableOpacity onPress={goBack}>
-            <Text className="text-2xl">←</Text>
-          </TouchableOpacity>
-        ) : <View className="w-8" />}
-        <View className="flex-1 items-center">
-          <Text className="text-3xl font-bold text-gray-900">Admin</Text>
-        </View>
-        <View className="w-8" />
-      </View>
+      <AdminHeader canGoBack={canGoBack} onGoBack={goBack} />
       <KeyboardAvoidingView 
         className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={0}
       >
-          <ScrollView
+        <ScrollView
           ref={scrollViewRef}
           className="flex-1 px-4 py-6"
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ paddingBottom: 100 }}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
         >
-          <View className="flex-row gap-2 mb-6">
-            <Pressable 
-              onPress={() => {
-                hapticMedium();
-                onStartScanning();
-              }}
-              className="flex-1 bg-black py-3 rounded"
-              style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-            >
-              <Text className="text-white text-center">Scan QR</Text>
-            </Pressable>
-            <Pressable 
-              onPress={() => {
-                hapticLight();
-                onCreateBlank();
-              }}
-              className="flex-1 border border-black py-3 rounded"
-              style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
-            >
-              <Text className="text-center">New</Text>
-            </Pressable>
-          </View>
-
+          <AdminQRControls
+            onStartScanning={onStartScanning}
+            onCreateBlank={onCreateBlank}
+            hapticMedium={hapticMedium}
+            hapticLight={hapticLight}
+          />
           {activity && (
             <>
-              <View className="mb-6">
-                <Text className="text-sm mb-2">Title</Text>
-                <TextInput
-                  value={activity.title}
-                  onChangeText={(text) => onUpdateActivity({ ...activity, title: text })}
-                  onFocus={hapticLight}
-                  className="border border-gray-300 rounded px-3 py-2"
-                  returnKeyType="next"
-                />
-              </View>
-
-              <View className="mb-6">
-                <Text className="text-sm mb-2">Description</Text>
-                <TextInput
-                  value={activity.description}
-                  onChangeText={(text) => onUpdateActivity({ ...activity, description: text })}
-                  onFocus={hapticLight}
-                  className="border border-gray-300 rounded px-3 py-2"
-                  multiline
-                  numberOfLines={2}
-                  textAlignVertical="top"
-                />
-              </View>
-
-              <View className="mb-6">
-                <Text className="text-sm mb-2">Image URL</Text>
-                <TextInput
-                  value={activity.uri}
-                  onChangeText={(text) => onUpdateActivity({ ...activity, uri: text })}
-                  onFocus={hapticLight}
-                  className="border border-gray-300 rounded px-3 py-2"
-                  returnKeyType="next"
-                />
-              </View>
-
-              <View className="mb-4">
-                <View className="flex-row justify-between items-center mb-3">
-                  <Text className="text-lg font-bold">Étapes</Text>
-                  <Pressable 
-                    onPress={() => {
-                      hapticLight();
-                      addEtape();
-                    }}
-                    style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
-                  >
-                    <Text className="text-blue-600">+ Add</Text>
-                  </Pressable>
-                </View>
-
-                {activity.etapes.map((etape, index) => (
-                  <View 
-                    key={index} 
-                    ref={(ref) => { etapeRefs.current[index] = ref; }}
-                    className="border border-gray-200 rounded p-3 mb-3"
-                  >
-                    <View className="flex-row justify-between mb-3">
-                      <Text className="font-medium">#{index + 1}</Text>
-                      <Pressable 
-                        onPress={() => {
-                          hapticMedium();
-                          removeEtape(index);
-                        }}
-                        style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
-                      >
-                        <Text className="text-red-600">Remove</Text>
-                      </Pressable>
-                    </View>
-
-                    <TextInput
-                      value={etape.titre}
-                      onChangeText={(text) => updateEtape(index, { ...etape, titre: text })}
-                      onFocus={() => handleEtapeFocus(index)}
-                      className="border border-gray-200 rounded px-2 py-2 mb-2"
-                      placeholder="Title"
-                      returnKeyType="next"
-                      
-                    />
-
-                    <TextInput
-                      value={etape.poi}
-                      onChangeText={(text) => updateEtape(index, { ...etape, poi: text })}
-                      onFocus={() => handleEtapeFocus(index)}
-                      className="border border-gray-200 rounded px-2 py-2 mb-2"
-                      placeholder="Location (lat, lng)"
-                      returnKeyType="next"
-                      
-                    />
-
-                    <TextInput
-                      value={etape.description}
-                      onChangeText={(text) => updateEtape(index, { ...etape, description: text })}
-                      onFocus={() => handleEtapeFocus(index)}
-                      className="border border-gray-200 rounded px-2 py-2 mb-2"
-                      multiline
-                      numberOfLines={2}
-                      placeholder="Description"
-                      textAlignVertical="top"
-                    />
-
-                    <View className="flex-row gap-2">
-                      <TextInput
-                        value={etape.reponse}
-                        onChangeText={(text) => updateEtape(index, { ...etape, reponse: text })}
-                        onFocus={() => handleEtapeFocus(index)}
-                        className="flex-1 border border-gray-200 rounded px-2 py-2"
-                        placeholder="Answer"
-                        returnKeyType="next"
-                        
-                      />
-                      <TextInput
-                        value={String(etape.radius)}
-                        onChangeText={(text) => updateEtape(index, { ...etape, radius: parseInt(text) || 0 })}
-                        onFocus={() => handleEtapeFocus(index)}
-                        className="w-20 border border-gray-200 rounded px-2 py-2"
-                        keyboardType="numeric"
-                        placeholder="50m"
-                        returnKeyType="done"
-                      />
-                    </View>
-                  </View>
-                ))}
-              </View>
-
-              <Pressable 
-                onPress={() => {
-                  hapticSuccess();
-                  onGenerateQR();
-                }}
-                className="bg-black py-4 rounded mb-6"
-                style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-              >
-                <Text className="text-white text-center font-medium">Generate QR</Text>
-              </Pressable>
-
-              {generatedQRCode && (
-                <View className="items-center mb-6">
-                  <View className="bg-white p-6 rounded-2xl shadow-lg mb-6">
-                    <QRCode value={generatedQRCode} size={200} />
-                  </View>
-                </View>
-              )}
+              <AdminActivityFields
+                activity={activity}
+                onUpdateActivity={onUpdateActivity}
+                hapticLight={hapticLight}
+              />
+              <AdminStepsSection
+                steps={activity.steps}
+                onAddStep={addStep}
+                onUpdateStep={updateStep}
+                onRemoveStep={removeStep}
+                onAddMission={addMission}
+                onUpdateMission={updateMission}
+                onRemoveMission={removeMission}
+                onMissionFocus={handleMissionFocus}
+                stepRefs={stepRefs}
+                missionCardRefs={missionCardRefs}
+                hapticLight={hapticLight}
+                hapticMedium={hapticMedium}
+              />
+              <AdminQRSection
+                generatedQRCode={generatedQRCode}
+                onGenerateQR={onGenerateQR}
+                hapticSuccess={hapticSuccess}
+              />
             </>
           )}
-
           {!activity && (
             <View className="py-12">
-              <Text className="text-gray-400 text-center">
-                Scan or create an activity
+              <Text className="text-gray-400 text-center text-base">
+                Scan or create an activity to get started
               </Text>
             </View>
           )}

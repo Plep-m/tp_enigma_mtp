@@ -13,13 +13,27 @@ const KEY_MAP: Record<string, string> = {
   id: 'i',
   title: 't',
   description: 'ds',
+  steps: 's',
+  missions: 'm',
+  image: 'im',
+  category: 'cat',
+  duration: 'd',
+  level: 'l',
+  poiLat: 'lat',
+  poiLng: 'lng',
+  radius: 'rd',
+  type: 'tp',
+  instruction: 'ins',
+  question: 'q',
+  expectedAnswer: 'ans',
+  victoryCondition: 'vc',
+  // Legacy mappings for backwards compatibility
   uri: 'u',
   etapes: 'e',
   titre: 'tt',
   poi: 'p',
   condition_victoire: 'c',
-  reponse: 'r',
-  radius: 'rd'
+  reponse: 'r'
 };
 
 const REVERSE_KEY_MAP: Record<string, string> = Object.fromEntries(

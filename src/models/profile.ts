@@ -5,5 +5,8 @@ export type ProfileModel = {
   phone_number: string;
   gender: string;
   age: number;
+  xp: number;
+  level: number;
+  completedActivityIds: number[];
 };
 

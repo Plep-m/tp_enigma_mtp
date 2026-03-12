@@ -10,7 +10,7 @@ export const useProfile = () => {
     PROFILE_KEY, profileData
   );
   
-  const saveProfileField = useCallback(async(profileFieldKey: keyof ProfileModel, value: string | number) => {
+  const saveProfileField = useCallback(async(profileFieldKey: keyof ProfileModel, value: string | number | number[]) => {
     if(!profile) return;
     const savedProfile: ProfileModel = {
         ...profile,
@@ -21,10 +21,35 @@ export const useProfile = () => {
       [profile, setProfile]
     );
 
+  const addXp = useCallback(async (amount: number) => {
+    if (!profile) return;
+    const newXp = profile.xp + amount;
+    const newLevel = Math.floor(newXp / 100) + 1;
+    const updatedProfile: ProfileModel = {
+      ...profile,
+      xp: newXp,
+      level: newLevel,
+    };
+    await setProfile(updatedProfile);
+  }, [profile, setProfile]);
+
+  const completeActivity = useCallback(async (activityId: number) => {
+    if (!profile) return;
+    if (!profile.completedActivityIds.includes(activityId)) {
+      const updatedProfile: ProfileModel = {
+        ...profile,
+        completedActivityIds: [...profile.completedActivityIds, activityId],
+      };
+      await setProfile(updatedProfile);
+    }
+  }, [profile, setProfile]);
+
   return {
     profile,
     loading,
     error,
-    saveProfileField
+    saveProfileField,
+    addXp,
+    completeActivity,
   };
 };

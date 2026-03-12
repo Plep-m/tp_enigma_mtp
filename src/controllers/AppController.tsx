@@ -1,11 +1,11 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import TempHomeView from '../views/TempHomeView';
+import HomeView from '../views/HomeView';
 
 const AppController: React.FC = () => {
   return (
     <>
-      <TempHomeView />
+      <HomeView />
       <StatusBar style="dark" />
     </>
   );
