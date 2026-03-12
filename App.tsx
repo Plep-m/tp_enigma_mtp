@@ -1,11 +1,9 @@
+import { Buffer } from 'buffer';
+global.Buffer = Buffer;
+
 import './global.css';
-import {createStaticNavigation} from '@react-navigation/native';
-import { NavigationContainer } from "@react-navigation/native";
-import ProfileSettingsStackNavigator from './src/navigation/ProfileSettingsStackNavigator';
-import ProfileController from './src/controllers/ProfileController';
+import AdminController from './src/controllers/AdminController';
 
 export default function App() {
- return (
-    <ProfileController />
-   );
+  return <AdminController />;
 }
