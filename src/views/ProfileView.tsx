@@ -20,6 +20,10 @@ type Props = {
   editingField: keyof ProfileModel | null;
   setEditingField: (field: keyof ProfileModel | null) => void;
   handleUpdateField: (fieldKey: keyof ProfileModel, value: string | number) => void;
+  statVisitedLocations?: number;
+  statRealizedActivities?: number;
+  statLongestDistanceTraveled?: string;
+  statScoreLocationsRank?: string[];
 };
 
 const ProfileView: React.FC<Props> = ({
@@ -27,6 +31,10 @@ const ProfileView: React.FC<Props> = ({
   editingField,
   setEditingField,
   handleUpdateField,
+  statVisitedLocations = 0,
+  statRealizedActivities = 0,
+  statLongestDistanceTraveled = 'N/A',
+  statScoreLocationsRank = [],
 }) => {
   const [tempValue, setTempValue] = useState('');
   const { navigate, goBack, canGoBack } = useAppNavigation();
@@ -104,6 +112,60 @@ const ProfileView: React.FC<Props> = ({
                   <Text className="text-2xl font-bold text-gray-900">
                     {profile.completedActivityIds.length}
                   </Text>
+                </View>
+              </View>
+
+              {/* Detailed Stats */}
+              <View className="mb-8 px-5">
+                <Text className="mb-3 text-lg font-bold text-gray-900">Statistiques détaillées</Text>
+
+                <View className="space-y-3">
+                  <View className="flex-row gap-3">
+                    {/* Visited Locations */}
+                    <View className="flex-1 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+                      <Text className="mb-1 text-xs font-semibold uppercase text-gray-500">
+                        Lieux visités
+                      </Text>
+                      <Text className="text-xl font-bold text-gray-900">{statVisitedLocations}</Text>
+                    </View>
+
+                    {/* Realized Activities */}
+                    <View className="flex-1 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+                      <Text className="mb-1 text-xs font-semibold uppercase text-gray-500">
+                        Activités
+                      </Text>
+                      <Text className="text-xl font-bold text-gray-900">
+                        {statRealizedActivities}
+                      </Text>
+                    </View>
+                  </View>
+
+                  {/* Longest Distance */}
+                  <View className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+                    <Text className="mb-1 text-xs font-semibold uppercase text-gray-500">
+                      Distance max
+                    </Text>
+                    <Text className="text-base font-bold text-gray-900">
+                      {statLongestDistanceTraveled}
+                    </Text>
+                  </View>
+
+                  {/* Location Ranks */}
+                  {statScoreLocationsRank && statScoreLocationsRank.length > 0 && (
+                    <View className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+                      <Text className="mb-2 text-xs font-semibold uppercase text-gray-500">
+                        Classement lieux
+                      </Text>
+                      {statScoreLocationsRank.map((rank, index) => (
+                        <View
+                          key={index}
+                          className="flex-row items-center justify-between border-b border-gray-50 py-1 last:border-0">
+                          <Text className="font-medium text-gray-500">#{index + 1}</Text>
+                          <Text className="font-semibold text-gray-900">{rank}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  )}
                 </View>
               </View>
 
