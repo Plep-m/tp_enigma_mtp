@@ -6,8 +6,13 @@
 
 ## Fonctionnalités clés
 
+- Gérer les paramètres clés de l'application (thème, taille de police)
+
 ## Installation et lancement
 
 ## Architecture
 
 ## Tableau de répartition des tâches
+
+Navid :
+- Écran Paramètres
