@@ -13,6 +13,7 @@ const buttons: NavButton[] = [
   { label: 'Profil',      screen: 'Profile',  emoji: '👤' },
   { label: 'Admin',       screen: 'Admin',    emoji: '🛠️' },
   { label: 'Map',         screen: 'Map',      emoji: '🛠️' },
+  { label: 'Detail',      screen: 'Detail',   emoji: '🛠️' },
 ];
 
 const TempHomeView: React.FC = () => {

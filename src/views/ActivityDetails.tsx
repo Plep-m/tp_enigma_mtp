@@ -2,21 +2,29 @@ import { StyleSheet, Text,FlatList, View, ScrollView, Button, Pressable } from "
 import React from "react";
 import {Image} from "expo-image";
 import {SafeAreaView } from "react-native-safe-area-context";
-import MapView from "react-native-maps";
+
+import MapCard, { Coordinate } from '../components/MapCard';
+
+import { useAppNavigation } from "../navigation/_layout";
+
+
 type GreetingProps = {
   id: number;
   title: string;
   imgUrl: string;
   etape: Array<string>;
   description?: string;
+  waypoints: Coordinate[];
 };
 
-export default function ActiviteDetail({ title, id, imgUrl, etape, description }: GreetingProps) {
+export default function ActiviteDetail({ title, imgUrl, etape, description, waypoints }: GreetingProps) {
+  
+  const { goBack, canGoBack } = useAppNavigation();
   return (
     <SafeAreaView>
         <Pressable 
           style = {styles.backButton}
-          onPress={() => alert("back button")}
+          onPress={goBack}
         >
           <Text style = {styles.textBoutton}>{'<'}</Text>
         </Pressable>
@@ -46,13 +54,13 @@ export default function ActiviteDetail({ title, id, imgUrl, etape, description }
                 keyExtractor={(item, index) => index.toString()}
             />
           </View>
-            <MapView 
-              style={styles.map}
-              showsMyLocationButton = {true}
-              showsUserLocation = {true}/>
-
+            <Text style={styles.title}>
+              Localisation:
+            </Text>
+            <MapCard waypoints={waypoints} />
           </View>
         </ScrollView>
+          
           <Pressable
             style = {styles.playButton}
             onPress = {() => alert("play button")}>
@@ -120,7 +128,7 @@ const styles = StyleSheet.create({
   },
   map:{
     marginTop: 20,
-    width: "100%",
+    width: "98%",
     height: 250,
   },
   playButton: {
