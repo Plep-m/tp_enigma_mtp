@@ -1,7 +1,10 @@
-import DetailController from '@/controllers/DetailController';
+import { Buffer } from 'buffer';
+global.Buffer = Buffer;
+
 import './global.css';
-import AppController from './src/controllers/AppController';
+import Navigator from './src/navigation/_layout';
 
 export default function App() {
-  return (<DetailController />);
+  return <Navigator />;
 }
+
