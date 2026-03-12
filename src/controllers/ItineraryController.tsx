@@ -1,5 +1,5 @@
 import React from 'react';
-import MapView from '../views/MapView';
+import ItineraryView from '../views/ItineraryView';
 import { Coordinate } from '../models/map';
 
 const WAYPOINTS: Coordinate[] = [
@@ -8,6 +8,11 @@ const WAYPOINTS: Coordinate[] = [
   { latitude: 43.6112, longitude: 3.8708 },
 ];
 
-const MapController: React.FC = () => <MapView waypoints={WAYPOINTS} />;
+const ItineraryController: React.FC = () => (
+  <ItineraryView
+    waypoints={WAYPOINTS}
+    destination={WAYPOINTS[WAYPOINTS.length - 1]}
+  />
+);
 
-export default MapController;
+export default ItineraryController;
