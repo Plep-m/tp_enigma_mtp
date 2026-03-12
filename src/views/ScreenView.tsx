@@ -13,7 +13,7 @@ const ScreenView: React.FC<Props> = ({ model }) => {
         <View className="h-[1px] w-4/5 bg-gray-300 my-6" />
         <View className="items-center mx-8">
           <Text className="text-lg leading-6 text-center text-gray-700 mb-4">
-            Open up the code for this screen:
+            Open up the code for this screen: hehe
           </Text>
           <View className="bg-gray-100 rounded-lg px-4 py-2 my-2">
             <Text className="font-mono text-sm text-gray-900">{model.path}</Text>
