@@ -3,39 +3,46 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Alert } from 'react-native';
 import AdminView from '../views/AdminView';
-import { Activity, createBlankActivity } from '../models/admin';
+import { Activity } from '../models/activity';
+import { createBlankActivity } from '../models/admin';
 import { encodeActivity, decodeActivity } from '../models/qrcode';
+import { useActivities } from '../hooks/useActivities';
 
 const AdminController: React.FC = () => {
   const [activity, setActivity] = useState<Activity | null>(null);
   const [generatedQRCode, setGeneratedQRCode] = useState<string | null>(null);
   const [isScanning, setIsScanning] = useState(false);
 
+  const { saveActivity } = useActivities();
+
   const handleUpdateActivity = (updatedActivity: Activity) => {
     setActivity(updatedActivity);
     setGeneratedQRCode(null);
   };
 
-  const handleGenerateQR = () => {
+  const handleGenerateQR = async () => {
     if (!activity) return;
     try {
-      const encoded = encodeActivity(activity);
+      const activityToSave = { ...activity, source: 'admin' as const };
+      await saveActivity(activityToSave, 'admin');
+      const encoded = encodeActivity(activityToSave);
       setGeneratedQRCode(encoded);
-    } catch (error) {
+
+      Alert.alert('Success', 'Activity saved and QR code generated!');
+    } catch {
       Alert.alert('Error', 'Failed to generate QR code');
     }
   };
 
   const handleScan = (data: string) => {
+    setIsScanning(false);
     try {
       const decoded = decodeActivity<Activity>(data);
-      setActivity(decoded);
+      setActivity({ ...decoded, source: 'admin' as const });
       setGeneratedQRCode(null);
-      setIsScanning(false);
       Alert.alert('Success', 'Activity loaded from QR code!');
-    } catch (error) {
+    } catch {
       Alert.alert('Error', 'Invalid QR code format');
-      setIsScanning(false);
     }
   };
 

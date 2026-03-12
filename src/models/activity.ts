@@ -13,4 +13,5 @@ export type Activity = {
   description: string;
   uri: string;
   etapes: Etape[];
+  source?: 'admin' | 'imported';
 };

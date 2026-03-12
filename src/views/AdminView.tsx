@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import QRCode from 'react-native-qrcode-svg';
 import { impactAsync, ImpactFeedbackStyle, notificationAsync, NotificationFeedbackType } from 'expo-haptics';
 import QRScanner from '../../components/QRScanner';
-import { Activity, Etape } from '../models/admin';
+import { Activity, Etape } from '../models/activity';
 
 type Props = {
   activity: Activity | null;
