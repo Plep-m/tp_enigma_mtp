@@ -66,7 +66,6 @@ const SettingsView: React.FC<Props> = (
                         )}
                     <TouchableOpacity onPress={() => 
                         {
-                            console.log(`Modifier ${settingsField.label}`);
                             setTempValue(settings[settingsField.key]);
                             setEditingField(editingField === settingsField.key ? null : settingsField.key);
                         }}

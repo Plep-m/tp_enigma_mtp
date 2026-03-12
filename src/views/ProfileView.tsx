@@ -100,7 +100,6 @@ const ProfileView: React.FC<Props> = (
                       )}
 
                     <TouchableOpacity onPress={() => {
-                      console.log(`Modifier ${profileField.label}`);
                       setTempValue(String(profile[profileField.key]));
                       setEditingField(editingField === profileField.key ? null : profileField.key);
                       }
