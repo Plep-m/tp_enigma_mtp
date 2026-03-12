@@ -3,7 +3,6 @@ import { ProfileModel } from '../models/profile';
 import { useAsyncStorage, } from './useAsyncStorage';
 import profileData from '../data/profile.json';
 
-
 const PROFILE_KEY = 'profile';
 
 export const useProfile = () => {
@@ -21,7 +20,6 @@ export const useProfile = () => {
     },
       [profile, setProfile]
     );
-
 
   return {
     profile,

@@ -6,9 +6,9 @@ import { useProfile } from '../hooks/useProfile';
 
 
 const ProfileController: React.FC = () => {
-    const [profile] = useState<ProfileModel | null>(null);
+    const { profile, saveProfileField } = useProfile();
     const [editingField, setEditingField] = useState<keyof ProfileModel | null>(null);
-    const { saveProfileField } = useProfile();
+    
 
     const handleSaveProfile = async (fieldKey: keyof ProfileModel, value: string | number) => {
         await saveProfileField(fieldKey, value);

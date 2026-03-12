@@ -27,7 +27,6 @@ const ProfileView: React.FC<Props> = (
             </View>
             <TouchableOpacity 
                 onPress={() => {
-                  console.log("Redirection vers Paramètres");
                   navigate('Settings');
                 }}
             >
