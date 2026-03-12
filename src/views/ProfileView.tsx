@@ -10,11 +10,15 @@ type Props = {
   editingField: keyof ProfileModel | null;
   setEditingField: (field: keyof ProfileModel | null) => void;
   handleUpdateField: (fieldKey: keyof ProfileModel, value: string | number) => void;
+  statVisitedLocations: number | null ;
+  statRealizedActivities: number | null ;
+  statLongestDistanceTraveled: string | null ;
 };
 
 
 const ProfileView: React.FC<Props> = (
-{ profile, editingField, setEditingField, handleUpdateField}
+{ profile, editingField, setEditingField, handleUpdateField, 
+  statVisitedLocations, statRealizedActivities, statLongestDistanceTraveled}
 ) => {
   const [tempValue, setTempValue] = useState("");
   const { navigate, goBack, canGoBack } = useAppNavigation();
@@ -70,11 +74,11 @@ const ProfileView: React.FC<Props> = (
             <View className="flex-row space-x-3 mb-3">
             {/* Première card */}
             <View className="flex-1 p-3 bg-white border border-default rounded-xl justify-center shadow-md">
-              <Text>Lieux visités : <Text className="text-sky-400">[300]</Text></Text>
+              <Text>Lieux visités : <Text className="text-sky-400">[{statVisitedLocations}]</Text></Text>
             </View>
             {/* Deuxième card */}
             <View className="flex-1 p-3 bg-white border border-default rounded-xl justify-center shadow-md">
-              <Text>Activités réalisées : <Text className="text-sky-400">[99]</Text></Text>
+              <Text>Activités réalisées : <Text className="text-sky-400">[{statRealizedActivities}]</Text></Text>
             </View>
           </View>
              {/* Troisième card */}
@@ -88,7 +92,7 @@ const ProfileView: React.FC<Props> = (
             {/* Quatrième card */}
             <View className="p-3 bg-white border border-default rounded-xl justify-center shadow-md">
               <Text>Distance la plus longue parcourue : 
-                <Text className="text-sky-400"> Comédie -- Millénaire (10 km)</Text>
+                <Text className="text-sky-400"> [{statLongestDistanceTraveled}]</Text>
               </Text>
             </View>
         </View>
