@@ -9,7 +9,6 @@ const ProfileController: React.FC = () => {
     const { profile, saveProfileField } = useProfile();
     const [editingField, setEditingField] = useState<keyof ProfileModel | null>(null);
     
-
     const handleSaveProfile = async (fieldKey: keyof ProfileModel, value: string | number) => {
         await saveProfileField(fieldKey, value);
         setEditingField(null);

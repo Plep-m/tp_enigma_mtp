@@ -58,9 +58,7 @@ const SettingsView: React.FC<Props> = (
                           }}
                           />
                         ) : (
-
-                        <>
-                                              
+                        <>                  
                      {settings ? (<><Text className="text-sky-400"> {settings[settingsField.key]}</Text></>) : <></>}
                      </>
                         )}

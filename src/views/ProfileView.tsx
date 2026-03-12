@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ProfileModel } from '../models/profile';
 import { profileFields } from "../components/profileFields";
@@ -20,6 +20,17 @@ const ProfileView: React.FC<Props> = (
   const { navigate } = useAppNavigation();
     return (
         <SafeAreaView className="flex-1 bg-white">
+          <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+          className="flex-1" 
+          keyboardVerticalOffset={90} // pour avoir de la marge par rapport au header
+          >
+            <ScrollView 
+            className="flex-1 px-4 py-6" 
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ paddingBottom: 80 }}
+            showsVerticalScrollIndicator={false}
+            >
             {/* Header */}
           <View className="flex-row justify-between items-center px-4 py-3 border-b border-gray-200">
             <View className="flex-1 items-center">
@@ -111,9 +122,10 @@ const ProfileView: React.FC<Props> = (
                  ))
                 }
             </View>
-        
       </>
             )}
+            </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
       );
 };
