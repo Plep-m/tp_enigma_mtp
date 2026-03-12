@@ -1,0 +1,1 @@
+declare module 'base45-js';
