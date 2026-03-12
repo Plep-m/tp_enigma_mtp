@@ -6,6 +6,7 @@ import { profileFields } from "../components/profileFields";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ProfileSettingsStackParamList } from "../navigation/ProfileSettingsStackNavigator";
+import { useRouter } from "expo-router";
 
 type Props = {
   profile : ProfileModel | null;
@@ -14,14 +15,11 @@ type Props = {
   handleUpdateField: (fieldKey: keyof ProfileModel, value: string | number) => void;
 };
 
-type NavigationProp = NativeStackNavigationProp<ProfileSettingsStackParamList, "Profile">;
-
-
 const ProfileView: React.FC<Props> = (
 { profile, editingField, setEditingField, handleUpdateField}
 ) => {
   const [tempValue, setTempValue] = useState("");
-  const navigation = useNavigation<NavigationProp>();
+  const router = useRouter();
     return (
         <SafeAreaView className="flex-1 bg-white">
             {/* Header */}
@@ -32,7 +30,7 @@ const ProfileView: React.FC<Props> = (
             <TouchableOpacity 
                 onPress={() => {
                   console.log("Redirection vers Paramètres");
-                  navigation.navigate("Settings");
+                  router.push("/settings");
                 }}
             >
                 <Text className="text-2xl">⚙️</Text>

@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SettingsModel } from '../models/settings';
 import { settingsFields } from "../components/settingsFields";
+import { useRouter } from "expo-router";
 
 type Props = {
     settings: SettingsModel | null,
@@ -16,10 +17,20 @@ const SettingsView: React.FC<Props> = (
     {settings, editingField, setEditingField, handleUpdateField}
 ) => {
     const [tempValue, setTempValue] = useState("");
+    const router = useRouter();
     return (
         <SafeAreaView className="flex-1 bg-white">
             {/* Header */}
           <View className="flex-row justify-between items-center px-4 py-3 border-b border-gray-200">
+            <TouchableOpacity
+                className="bg-gray-300 px-6 py-3 rounded"
+                onPress={() => {
+                  console.log("Redirection back vers Profil");
+                  router.back();
+                }}
+            >
+            <Text>⬅️ Retour</Text>
+            </TouchableOpacity>
             <View className="flex-1 items-center">
                 <Text className="text-3xl font-bold text-gray-900">Paramètres</Text>
             </View>
