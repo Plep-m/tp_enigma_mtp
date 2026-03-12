@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TextInput, Pressable, KeyboardAvoidingView, Pla
 import { SafeAreaView } from 'react-native-safe-area-context';
 import QRCode from 'react-native-qrcode-svg';
 import { impactAsync, ImpactFeedbackStyle, notificationAsync, NotificationFeedbackType } from 'expo-haptics';
-import QRScanner from '../../components/QRScanner';
+import QRScanner from '../components/QRScanner';
 import { Activity, Etape } from '../models/activity';
 import { useAppNavigation } from '../navigation/_layout';
 
