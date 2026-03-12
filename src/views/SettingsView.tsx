@@ -58,15 +58,12 @@ const SettingsView: React.FC<Props> = (
                           }}
                           />
                         ) : (
-
-                        <>
-                                              
+                        <>                  
                      {settings ? (<><Text className="text-sky-400"> {settings[settingsField.key]}</Text></>) : <></>}
                      </>
                         )}
                     <TouchableOpacity onPress={() => 
                         {
-                            console.log(`Modifier ${settingsField.label}`);
                             setTempValue(settings[settingsField.key]);
                             setEditingField(editingField === settingsField.key ? null : settingsField.key);
                         }}

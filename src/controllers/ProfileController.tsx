@@ -1,33 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import ProfileView from '../views/ProfileView';
-import { ProfileModel, getProfile } from '../models/profile';
+import { ProfileModel } from '../models/profile';
+import { useProfile } from '../hooks/useProfile';
 
 
 const ProfileController: React.FC = () => {
-    const [profile, setProfile] = useState<ProfileModel | null>(null);
+    const { profile, saveProfileField } = useProfile();
     const [editingField, setEditingField] = useState<keyof ProfileModel | null>(null);
-    useEffect(() => {
-        const profileData = getProfile();
-        setProfile(profileData);
-    }, [])
-
-    const handleUpdateField = (fieldKey: keyof ProfileModel, value: string | number) => {
-        if(!profile) return;
-        setProfile({
-            ...profile,
-            [fieldKey]: value
-        });
+    
+    const handleSaveProfile = async (fieldKey: keyof ProfileModel, value: string | number) => {
+        await saveProfileField(fieldKey, value);
         setEditingField(null);
     };
-    
+
     return(
         <>
             <ProfileView
             profile={profile}
             editingField={editingField}
             setEditingField={setEditingField}
-            handleUpdateField={handleUpdateField}
+            handleUpdateField={handleSaveProfile}
             />
             <StatusBar style="dark" />
         </>
