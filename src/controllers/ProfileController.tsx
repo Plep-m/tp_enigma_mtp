@@ -25,6 +25,7 @@ const ProfileController: React.FC = () => {
     let maxKmDistanceTraveled = stats.maxKmDistanceTraveled;
     let statLongestDistanceTraveled = 
         `${stats.itineraryMaxDistanceTraveled} (${maxKmDistanceTraveled} km)`;
+    let statScoreLocationsRank = stats.scoreLocationsRank;
 
     return(
         <>
@@ -36,6 +37,7 @@ const ProfileController: React.FC = () => {
             statVisitedLocations={statVisitedLocations}
             statRealizedActivities={statRealizedActivities}
             statLongestDistanceTraveled={statLongestDistanceTraveled}
+            statScoreLocationsRank={statScoreLocationsRank}
             />
             <StatusBar style="dark" />
         </>

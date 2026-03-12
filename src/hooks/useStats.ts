@@ -8,7 +8,8 @@ const defaultStatsData: Stat = {
     visitedLocations: 300,
     RealizedActivities: 99,
     maxKmDistanceTraveled: 10,
-    itineraryMaxDistanceTraveled: "Comédie -- Millénaire"
+    itineraryMaxDistanceTraveled: "Comédie -- Millénaire",
+    scoreLocationsRank: ["Comédie", "Millénaire", "Jardins des Plantes", "..."]
 };
 
 export const useStats = () => {
@@ -30,7 +31,8 @@ export const useStats = () => {
         visitedLocations: 34,
         RealizedActivities: 100,
         maxKmDistanceTraveled: 10,
-        itineraryMaxDistanceTraveled: "Comédie -- Millénaire"
+        itineraryMaxDistanceTraveled: "Comédie -- Millénaire",
+        scoreLocationsRank: ["Comédie", "Millénaire", "Jardins des Plantes", "Mosson", "..."]
     });
   }, [stats, setStats])
 
