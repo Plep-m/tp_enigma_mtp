@@ -1,16 +1,13 @@
 import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import ScreenView from '../views/ScreenView';
-import { ScreenModel } from '../models/screen';
+import TempHomeView from '../views/TempHomeView';
 
 const AppController: React.FC = () => {
-  const model: ScreenModel = { title: 'Home', path: 'src/controllers/AppController.tsx' };
   return (
-    <SafeAreaProvider>
-      <ScreenView model={model} />
+    <>
+      <TempHomeView />
       <StatusBar style="dark" />
-    </SafeAreaProvider>
+    </>
   );
 };
 

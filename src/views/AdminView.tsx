@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
-import { View, Text, ScrollView, TextInput, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, ScrollView, TextInput, Pressable, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import QRCode from 'react-native-qrcode-svg';
 import { impactAsync, ImpactFeedbackStyle, notificationAsync, NotificationFeedbackType } from 'expo-haptics';
 import QRScanner from '../../components/QRScanner';
 import { Activity, Etape } from '../models/activity';
+import { useAppNavigation } from '../navigation/_layout';
 
 type Props = {
   activity: Activity | null;
@@ -31,7 +32,8 @@ const AdminView: React.FC<Props> = ({
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const etapeRefs = useRef<{ [key: number]: View | null }>({});
-  
+  const { goBack, canGoBack } = useAppNavigation();
+
   const hapticLight = () => impactAsync(ImpactFeedbackStyle.Light);
   const hapticMedium = () => impactAsync(ImpactFeedbackStyle.Medium);
   const hapticSuccess = () => notificationAsync(NotificationFeedbackType.Success);
@@ -86,19 +88,29 @@ const AdminView: React.FC<Props> = ({
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {/* Header */}
+      <View className="flex-row items-center px-4 py-3 border-b border-gray-200">
+        {canGoBack ? (
+          <TouchableOpacity onPress={goBack}>
+            <Text className="text-2xl">←</Text>
+          </TouchableOpacity>
+        ) : <View className="w-8" />}
+        <View className="flex-1 items-center">
+          <Text className="text-3xl font-bold text-gray-900">Admin</Text>
+        </View>
+        <View className="w-8" />
+      </View>
       <KeyboardAvoidingView 
         className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={0}
       >
-        <ScrollView 
+          <ScrollView
           ref={scrollViewRef}
           className="flex-1 px-4 py-6"
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ paddingBottom: 100 }}
         >
-          <Text className="text-2xl font-bold mb-6">Admin</Text>
-
           <View className="flex-row gap-2 mb-6">
             <Pressable 
               onPress={() => {

@@ -17,15 +17,20 @@ const ProfileView: React.FC<Props> = (
 { profile, editingField, setEditingField, handleUpdateField}
 ) => {
   const [tempValue, setTempValue] = useState("");
-  const { navigate } = useAppNavigation();
+  const { navigate, goBack, canGoBack } = useAppNavigation();
     return (
         <SafeAreaView className="flex-1 bg-white">
             {/* Header */}
           <View className="flex-row justify-between items-center px-4 py-3 border-b border-gray-200">
+            {canGoBack ? (
+              <TouchableOpacity onPress={goBack}>
+                <Text className="text-2xl">←</Text>
+              </TouchableOpacity>
+            ) : <View className="w-8" />}
             <View className="flex-1 items-center">
                 <Text className="text-3xl font-bold text-gray-900">Profil utilisateur</Text>
             </View>
-            <TouchableOpacity 
+            <TouchableOpacity
                 onPress={() => {
                   console.log("Redirection vers Paramètres");
                   navigate('Settings');

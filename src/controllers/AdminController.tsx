@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Alert } from 'react-native';
 import AdminView from '../views/AdminView';
@@ -52,7 +51,7 @@ const AdminController: React.FC = () => {
   };
 
   return (
-    <SafeAreaProvider>
+    <>
       <AdminView
         activity={activity}
         generatedQRCode={generatedQRCode}
@@ -65,7 +64,7 @@ const AdminController: React.FC = () => {
         onCreateBlank={handleCreateBlank}
       />
       <StatusBar style="dark" />
-    </SafeAreaProvider>
+    </>
   );
 };
 
