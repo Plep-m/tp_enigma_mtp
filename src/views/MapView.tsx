@@ -19,6 +19,7 @@ const MapView: React.FC<Props> = ({ waypoints, routeCoordinates, isLoading }) =>
             <ActivityIndicator size="large" color="#3b82f6" />
           </View>
         )}
+         
       </View>
     </SafeAreaView>
   );

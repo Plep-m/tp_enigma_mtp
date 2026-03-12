@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { View } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 
@@ -15,20 +15,21 @@ interface MapCardProps {
 const MapCard: React.FC<MapCardProps> = ({ waypoints, routeCoordinates }) => {
   const mapRef = useRef<MapView>(null);
 
-  useEffect(() => {
+  const handleMapReady = () => {
     if (mapRef.current && waypoints.length > 0) {
       mapRef.current.fitToCoordinates(waypoints, {
         edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
         animated: true,
       });
     }
-  }, [waypoints]);
+  };
 
   return (
     <View className="w-full h-96 rounded-xl overflow-hidden border border-gray-300 shadow-sm">
       <MapView
         ref={mapRef}
         style={{ flex: 1 }}
+        onMapReady={handleMapReady}
         initialRegion={
           waypoints.length > 0
             ? {
@@ -40,13 +41,13 @@ const MapCard: React.FC<MapCardProps> = ({ waypoints, routeCoordinates }) => {
             : undefined
         }
       >
-        {routeCoordinates.length > 0 && (
-          <Polyline
-            coordinates={routeCoordinates}
-            strokeColor="#3b82f6"
-            strokeWidth={4}
-          />
-        )}
+        <Polyline
+          key={`route-${routeCoordinates.length}`}
+          coordinates={routeCoordinates}
+          strokeColor="#3b82f6"
+          strokeWidth={4}
+          zIndex={1}
+        />
         {waypoints.map((point, index) => (
           <Marker
             key={`waypoint-${index}`}

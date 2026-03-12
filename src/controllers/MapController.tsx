@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MapView from '../views/MapView';
-import { Coordinate } from 'components/MapCard'
+import { Coordinate } from 'components/MapCard';
 import { Alert } from 'react-native';
 
 const MapController: React.FC = () => {
@@ -22,9 +22,24 @@ const MapController: React.FC = () => {
           .map((wp) => `${wp.longitude},${wp.latitude}`)
           .join(';');
         
-        const url = `https://router.project-osrm.org/route/v1/foot/${coordinatesString}?overview=full&geometries=geojson`;
-        console.log(url)
-        const response = await fetch(url);
+        const baseUrl = process.env.EXPO_PUBLIC_OSRM_BASE_URL || 'https://router.project-osrm.org';
+        const apiKey = process.env.EXPO_PUBLIC_OSRM_API_KEY || '';
+        
+        const url = `${baseUrl}/route/v1/foot/${coordinatesString}?overview=full&geometries=geojson`;
+        console.log('Fetching route from:', url);
+        
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'x-api-key': apiKey,
+            'Accept': 'application/json',
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
 
         if (data.code === 'Ok' && data.routes.length > 0) {
@@ -38,6 +53,7 @@ const MapController: React.FC = () => {
           Alert.alert('Routing Error', 'Could not find a valid route.');
         }
       } catch (error) {
+        console.error('Fetch route error:', error);
         Alert.alert('Network Error', 'Failed to fetch the route data.');
       } finally {
         setIsLoading(false);
