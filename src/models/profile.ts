@@ -1,5 +1,3 @@
-import profileData from '../data/profile.json';
-
 export type ProfileModel = {
   id: number;
   profile_pic_url: string;
@@ -8,8 +6,4 @@ export type ProfileModel = {
   gender: string;
   age: number;
 };
-
-export const getProfile = (): ProfileModel => {
-    return profileData;
-}
 
