@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import SettingsView from '../views/SettingsView';
 import { SettingsModel, getSettings } from '../models/settings';
@@ -22,15 +21,15 @@ const SettingsController: React.FC = () => {
     };
 
     return (
-        <SafeAreaProvider>
-            <SettingsView 
+        <>
+            <SettingsView
             settings={settings}
             editingField={editingField}
             setEditingField={setEditingField}
             handleUpdateField={handleUpdateField}
             />
             <StatusBar style="dark" />
-        </SafeAreaProvider>
+        </>
     );
 };
 

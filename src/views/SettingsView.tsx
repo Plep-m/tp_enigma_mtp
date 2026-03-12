@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SettingsModel } from '../models/settings';
 import { settingsFields } from "../components/settingsFields";
-import { useRouter } from "expo-router";
+import { useAppNavigation } from "../navigation/_layout";
 
 type Props = {
     settings: SettingsModel | null,
@@ -17,23 +17,20 @@ const SettingsView: React.FC<Props> = (
     {settings, editingField, setEditingField, handleUpdateField}
 ) => {
     const [tempValue, setTempValue] = useState("");
-    const router = useRouter();
+    const { goBack, canGoBack } = useAppNavigation();
     return (
         <SafeAreaView className="flex-1 bg-white">
             {/* Header */}
           <View className="flex-row justify-between items-center px-4 py-3 border-b border-gray-200">
-            <TouchableOpacity
-                className="bg-gray-300 px-6 py-3 rounded"
-                onPress={() => {
-                  console.log("Redirection back vers Profil");
-                  router.back();
-                }}
-            >
-            <Text>⬅️ Retour</Text>
-            </TouchableOpacity>
+            {canGoBack ? (
+              <TouchableOpacity onPress={goBack}>
+                <Text className="text-2xl">←</Text>
+              </TouchableOpacity>
+            ) : <View className="w-8" />}
             <View className="flex-1 items-center">
                 <Text className="text-3xl font-bold text-gray-900">Paramètres</Text>
             </View>
+            <View className="w-8" />
           </View> 
 
           {!settings ? (
@@ -71,7 +68,7 @@ const SettingsView: React.FC<Props> = (
                         {
                             console.log(`Modifier ${settingsField.label}`);
                             setTempValue(settings[settingsField.key]);
-                            setEditingField(editingField ? null : settingsField.key);
+                            setEditingField(editingField === settingsField.key ? null : settingsField.key);
                         }}
                     >
                     <Text className="text-xl">✏️</Text>

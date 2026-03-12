@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import {ImpactFeedbackStyle , impactAsync, NotificationFeedbackType, notificationAsync} from 'expo-haptics';
+import {
+  ImpactFeedbackStyle,
+  impactAsync,
+  NotificationFeedbackType,
+  notificationAsync,
+} from 'expo-haptics';
 
 type Props = {
   onScan: (data: string) => void;
@@ -10,7 +15,7 @@ type Props = {
 
 const QRScanner: React.FC<Props> = ({ onScan, onClose }) => {
   const [permission, requestPermission] = useCameraPermissions();
-  const [scanned, setScanned] = useState(false);
+  const scanningRef = useRef(true);
 
   if (!permission) {
     return <View className="flex-1 items-center justify-center bg-black" />;
@@ -19,17 +24,14 @@ const QRScanner: React.FC<Props> = ({ onScan, onClose }) => {
   if (!permission.granted) {
     return (
       <View className="flex-1 items-center justify-center bg-gray-900 px-6">
-        <Text className="text-white text-xl text-center mb-6">
-          Camera permission required
-        </Text>
+        <Text className="mb-6 text-center text-xl text-white">Camera permission required</Text>
         <Pressable
           onPress={() => {
             impactAsync(ImpactFeedbackStyle.Medium);
             requestPermission();
           }}
-          className="bg-white px-6 py-3 rounded"
-          style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-        >
+          className="rounded bg-white px-6 py-3"
+          style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
           <Text className="font-semibold">Grant Permission</Text>
         </Pressable>
       </View>
@@ -37,8 +39,8 @@ const QRScanner: React.FC<Props> = ({ onScan, onClose }) => {
   }
 
   const handleBarCodeScanned = ({ data }: { data: string }) => {
-    if (!scanned) {
-      setScanned(true);
+    if (scanningRef.current) {
+      scanningRef.current = false;
       notificationAsync(NotificationFeedbackType.Success);
       onScan(data);
     }
@@ -49,48 +51,30 @@ const QRScanner: React.FC<Props> = ({ onScan, onClose }) => {
       <CameraView
         style={StyleSheet.absoluteFillObject}
         facing="back"
-        onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+        onBarcodeScanned={handleBarCodeScanned}
         barcodeScannerSettings={{
           barcodeTypes: ['qr'],
         }}
       />
-      
+
       <View className="absolute inset-0 items-center justify-center">
-        <View className="w-64 h-64 border-2 border-white rounded-xl" />
-        <Text className="text-white text-center mt-8 text-lg px-6">
+        <View className="h-64 w-64 rounded-xl border-2 border-white" />
+        <Text className="mt-8 px-6 text-center text-lg text-white">
           Position QR code within frame
         </Text>
       </View>
 
-      <View className="absolute top-12 left-0 right-0 px-4">
+      <View className="absolute left-0 right-0 top-12 px-4">
         <Pressable
           onPress={() => {
             impactAsync(ImpactFeedbackStyle.Light);
             onClose();
           }}
-          className="bg-white/90 px-6 py-3 rounded self-start"
-          style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-        >
+          className="self-start rounded bg-white/90 px-6 py-3"
+          style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
           <Text className="font-semibold">✕ Close</Text>
         </Pressable>
       </View>
-
-      {scanned && (
-        <View className="absolute bottom-12 left-0 right-0 px-4">
-          <Pressable
-            onPress={() => {
-              impactAsync(ImpactFeedbackStyle.Light);
-              setScanned(false);
-            }}
-            className="bg-white px-6 py-4 rounded"
-            style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-          >
-            <Text className="font-semibold text-center">
-              Scan Again
-            </Text>
-          </Pressable>
-        </View>
-      )}
     </View>
   );
 };
