@@ -3,4 +3,5 @@ export type Stat = {
     RealizedActivities: number;
     maxKmDistanceTraveled: number;
     itineraryMaxDistanceTraveled: string;
+    scoreLocationsRank: Array<string>;
 }

@@ -13,12 +13,13 @@ type Props = {
   statVisitedLocations: number | null ;
   statRealizedActivities: number | null ;
   statLongestDistanceTraveled: string | null ;
+  statScoreLocationsRank: Array<string> | null ;
 };
 
 
 const ProfileView: React.FC<Props> = (
 { profile, editingField, setEditingField, handleUpdateField, 
-  statVisitedLocations, statRealizedActivities, statLongestDistanceTraveled}
+  statVisitedLocations, statRealizedActivities, statLongestDistanceTraveled, statScoreLocationsRank}
 ) => {
   const [tempValue, setTempValue] = useState("");
   const { navigate, goBack, canGoBack } = useAppNavigation();
@@ -84,10 +85,10 @@ const ProfileView: React.FC<Props> = (
              {/* Troisième card */}
             <View className="p-3 mb-2 bg-white border border-default rounded-xl justify-center shadow-md">
               <Text>Classement score des lieux :</Text>
-              <Text className="text-sky-400">- 1 | Comédie</Text>
-              <Text className="text-sky-400">- 2 | Millénaire</Text>
-              <Text className="text-sky-400">- 3 | Jardins des plantes</Text>
-              <Text className="text-sky-400">- 4 | ...</Text>
+              {statScoreLocationsRank?.map((locationRank, idx) => (
+                  <Text key={idx+1} className="text-sky-400">- {idx+1} | {locationRank}</Text>
+              ))
+              }
             </View>
             {/* Quatrième card */}
             <View className="p-3 bg-white border border-default rounded-xl justify-center shadow-md">
