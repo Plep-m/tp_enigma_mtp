@@ -1,6 +1,12 @@
 import './global.css';
-import AppController from './src/controllers/AppController';
+import {createStaticNavigation} from '@react-navigation/native';
+import { NavigationContainer } from "@react-navigation/native";
+import ProfileSettingsStackNavigator from './src/navigation/ProfileSettingsStackNavigator';
 
 export default function App() {
-  return <AppController />;
+ return (
+     <NavigationContainer>
+       <ProfileSettingsStackNavigator />;
+     </NavigationContainer>
+   );
 }

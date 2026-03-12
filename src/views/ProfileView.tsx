@@ -3,6 +3,9 @@ import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ProfileModel } from '../models/profile';
 import { profileFields } from "../components/profileFields";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { ProfileSettingsStackParamList } from "../navigation/ProfileSettingsStackNavigator";
 
 type Props = {
   profile : ProfileModel | null;
@@ -11,10 +14,14 @@ type Props = {
   handleUpdateField: (fieldKey: keyof ProfileModel, value: string | number) => void;
 };
 
+type NavigationProp = NativeStackNavigationProp<ProfileSettingsStackParamList, "Profile">;
+
+
 const ProfileView: React.FC<Props> = (
 { profile, editingField, setEditingField, handleUpdateField}
 ) => {
   const [tempValue, setTempValue] = useState("");
+  const navigation = useNavigation<NavigationProp>();
     return (
         <SafeAreaView className="flex-1 bg-white">
             {/* Header */}
@@ -22,7 +29,12 @@ const ProfileView: React.FC<Props> = (
             <View className="flex-1 items-center">
                 <Text className="text-3xl font-bold text-gray-900">Profil utilisateur</Text>
             </View>
-            <TouchableOpacity onPress={() => console.log("Redirection vers Paramètres")}>
+            <TouchableOpacity 
+                onPress={() => {
+                  console.log("Redirection vers Paramètres");
+                  navigation.navigate("Settings");
+                }}
+            >
                 <Text className="text-2xl">⚙️</Text>
             </TouchableOpacity>
           </View> 
