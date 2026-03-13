@@ -8,27 +8,22 @@ type Props = {
   hapticSuccess: () => void;
 };
 
-const AdminQRSection: React.FC<Props> = ({
-  generatedQRCode,
-  onGenerateQR,
-  hapticSuccess
-}) => {
+const AdminQRSection: React.FC<Props> = ({ generatedQRCode, onGenerateQR, hapticSuccess }) => {
   return (
     <>
-      <Pressable 
+      <Pressable
         onPress={() => {
           hapticSuccess();
           onGenerateQR();
         }}
-        className="bg-black py-4 rounded mb-6"
-        style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-      >
-        <Text className="text-white text-center font-semibold">Generate QR Code</Text>
+        className="mb-6 rounded bg-black py-4"
+        style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
+        <Text className="text-center font-semibold text-white">Generate QR Code</Text>
       </Pressable>
 
       {generatedQRCode && (
-        <View className="items-center mb-6">
-          <View className="bg-white p-6 rounded-2xl border border-gray-200">
+        <View className="mb-6 items-center">
+          <View className="rounded-2xl border border-gray-200 bg-white p-6">
             <QRCode value={generatedQRCode} size={200} />
           </View>
         </View>

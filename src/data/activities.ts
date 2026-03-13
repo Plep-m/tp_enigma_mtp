@@ -3,12 +3,13 @@ import { Activity } from '../models/activity';
 export const activities: Activity[] = [
   {
     id: 1,
-    title: "Place de la Comédie",
-    image: "https://images.pexels.com/photos/15073996/pexels-photo-15073996.jpeg",
-    description: "Découvrez le cœur de Montpellier.",
-    category: "historic",
+    title: 'Place de la Comédie',
+    image: 'https://images.pexels.com/photos/15073996/pexels-photo-15073996.jpeg',
+    description: 'Découvrez le cœur de Montpellier.',
+    category: 'historic',
     duration: 30,
-    level: "beginner",
+    level: 'beginner',
+    source: 'admin',
     steps: [
       {
         id: 1,
@@ -20,12 +21,12 @@ export const activities: Activity[] = [
           {
             id: 101,
             type: 'text',
-            instruction: "Combien de statues voyez-vous sur le toit ?",
-            expectedAnswer: "3",
-            victoryCondition: "exact"
-          }
-        ]
-      }
-    ]
-  }
+            instruction: 'Combien de statues voyez-vous sur le toit ?',
+            expectedAnswer: '3',
+            victoryCondition: 'exact',
+          },
+        ],
+      },
+    ],
+  },
 ];

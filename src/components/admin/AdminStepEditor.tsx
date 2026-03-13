@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
 import { Step, Mission } from '../../models/activity';
 import AdminMissionEditorCard from './AdminMissionEditorCard';
@@ -12,7 +12,7 @@ type Props = {
   onUpdateMission: (missionIndex: number, mission: Mission) => void;
   onRemoveMission: (missionIndex: number) => void;
   onMissionFocus: (stepIndex: number, missionIndex: number) => void;
-  missionCardRefs: React.MutableRefObject<{ [key: string]: View | null }>;
+  missionCardRefs: React.RefObject<{ [key: string]: View | null }>;
   hapticLight: () => void;
   hapticMedium: () => void;
 };
@@ -28,38 +28,54 @@ const AdminStepEditor: React.FC<Props> = ({
   onMissionFocus,
   missionCardRefs,
   hapticLight,
-  hapticMedium
+  hapticMedium,
 }) => {
+  const [latInput, setLatInput] = useState(String(step.poiLat));
+  const [lngInput, setLngInput] = useState(String(step.poiLng));
+
   const handleStepFieldFocus = () => {
     hapticLight();
   };
 
+  const handleLatChange = (text: string) => {
+    setLatInput(text);
+    const normalized = text.replace(',', '.');
+    const parsed = parseFloat(normalized);
+    if (!isNaN(parsed)) {
+      onUpdateStep({ ...step, poiLat: parsed });
+    }
+  };
+
+  const handleLngChange = (text: string) => {
+    setLngInput(text);
+    const normalized = text.replace(',', '.');
+    const parsed = parseFloat(normalized);
+    if (!isNaN(parsed)) {
+      onUpdateStep({ ...step, poiLng: parsed });
+    }
+  };
+
   return (
-    <View 
-      className="border border-gray-300 rounded-lg p-4 mb-4 bg-gray-50"
-    >
-      {/* Step Header */}
-      <View className="flex-row justify-between items-center mb-4">
+    <View className="mb-4 rounded-lg border border-gray-300 bg-gray-50 p-4">
+      <View className="mb-4 flex-row items-center justify-between">
         <Text className="text-lg font-bold text-gray-900">Step #{stepIndex + 1}</Text>
-        <Pressable 
+        <Pressable
           onPress={() => {
             hapticMedium();
             onRemoveStep();
           }}
-          style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
-        >
-          <Text className="text-red-600 font-semibold">Remove</Text>
+          style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}>
+          <Text className="font-semibold text-red-600">Remove</Text>
         </Pressable>
       </View>
 
-      {/* Step Fields */}
       <View className="mb-4">
-        <Text className="text-xs font-semibold mb-1 text-gray-600">Description</Text>
+        <Text className="mb-1 text-xs font-semibold text-gray-600">Description</Text>
         <TextInput
           value={step.description}
           onChangeText={(text) => onUpdateStep({ ...step, description: text })}
           onFocus={handleStepFieldFocus}
-          className="border border-gray-300 rounded px-3 py-2 bg-white"
+          className="rounded border border-gray-300 bg-white px-3 py-2"
           placeholder="Step Description"
           multiline
           numberOfLines={2}
@@ -67,39 +83,36 @@ const AdminStepEditor: React.FC<Props> = ({
         />
       </View>
 
-      {/* Latitude & Longitude & Radius */}
-      <View className="flex-row gap-3 mb-4">
+      <View className="mb-4 flex-row gap-3">
         <View className="flex-1">
-          <Text className="text-xs font-semibold mb-1 text-gray-600">Latitude</Text>
+          <Text className="mb-1 text-xs font-semibold text-gray-600">Latitude</Text>
           <TextInput
-            value={String(step.poiLat)}
-            onChangeText={(text) => onUpdateStep({ ...step, poiLat: parseFloat(text) || 0 })}
+            value={latInput}
+            onChangeText={handleLatChange}
             onFocus={handleStepFieldFocus}
-            className="border border-gray-300 rounded px-3 py-2 bg-white"
+            className="rounded border border-gray-300 bg-white px-3 py-2"
             placeholder="0.0"
-            keyboardType="decimal-pad"
             returnKeyType="next"
           />
         </View>
         <View className="flex-1">
-          <Text className="text-xs font-semibold mb-1 text-gray-600">Longitude</Text>
+          <Text className="mb-1 text-xs font-semibold text-gray-600">Longitude</Text>
           <TextInput
-            value={String(step.poiLng)}
-            onChangeText={(text) => onUpdateStep({ ...step, poiLng: parseFloat(text) || 0 })}
+            value={lngInput}
+            onChangeText={handleLngChange}
             onFocus={handleStepFieldFocus}
-            className="border border-gray-300 rounded px-3 py-2 bg-white"
+            className="rounded border border-gray-300 bg-white px-3 py-2"
             placeholder="0.0"
-            keyboardType="decimal-pad"
             returnKeyType="next"
           />
         </View>
         <View className="flex-1">
-          <Text className="text-xs font-semibold mb-1 text-gray-600">Radius (m)</Text>
+          <Text className="mb-1 text-xs font-semibold text-gray-600">Radius (m)</Text>
           <TextInput
             value={String(step.radius)}
             onChangeText={(text) => onUpdateStep({ ...step, radius: parseInt(text) || 0 })}
             onFocus={handleStepFieldFocus}
-            className="border border-gray-300 rounded px-3 py-2 bg-white"
+            className="rounded border border-gray-300 bg-white px-3 py-2"
             placeholder="50"
             keyboardType="numeric"
             returnKeyType="done"
@@ -107,24 +120,22 @@ const AdminStepEditor: React.FC<Props> = ({
         </View>
       </View>
 
-      {/* Missions Section */}
       <View className="border-t border-gray-300 pt-4">
-        <View className="flex-row justify-between items-center mb-3">
+        <View className="mb-3 flex-row items-center justify-between">
           <Text className="font-semibold text-gray-900">Missions</Text>
-          <Pressable 
+          <Pressable
             onPress={() => {
               hapticLight();
               onAddMission();
             }}
-            style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
-          >
-            <Text className="text-blue-600 text-sm">+ Add Mission</Text>
+            style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}>
+            <Text className="text-sm text-blue-600">+ Add Mission</Text>
           </Pressable>
         </View>
 
         {step.missions.length === 0 ? (
-          <View className="py-4 bg-white rounded border border-dashed border-gray-300">
-            <Text className="text-gray-400 text-center text-sm">No missions yet</Text>
+          <View className="rounded border border-dashed border-gray-300 bg-white py-4">
+            <Text className="text-center text-sm text-gray-400">No missions yet</Text>
           </View>
         ) : (
           step.missions.map((mission, missionIndex) => (
@@ -133,8 +144,7 @@ const AdminStepEditor: React.FC<Props> = ({
               ref={(ref) => {
                 const refKey = `${stepIndex}-${missionIndex}`;
                 missionCardRefs.current[refKey] = ref;
-              }}
-            >
+              }}>
               <AdminMissionEditorCard
                 mission={mission}
                 missionIndex={missionIndex}

@@ -1,9 +1,19 @@
-import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView, StatusBar } from "react-native";
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StatusBar,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ProfileModel } from '../models/profile';
-import { profileFields } from "../components/profileFields";
-import { useAppNavigation } from "../navigation/StackNavigator";
+import { profileFields } from '../components/profileFields';
+import { useAppNavigation } from '../navigation/StackNavigator';
 
 type Props = {
   profile: ProfileModel | null;
@@ -12,8 +22,13 @@ type Props = {
   handleUpdateField: (fieldKey: keyof ProfileModel, value: string | number) => void;
 };
 
-const ProfileView: React.FC<Props> = ({ profile, editingField, setEditingField, handleUpdateField }) => {
-  const [tempValue, setTempValue] = useState("");
+const ProfileView: React.FC<Props> = ({
+  profile,
+  editingField,
+  setEditingField,
+  handleUpdateField,
+}) => {
+  const [tempValue, setTempValue] = useState('');
   const { navigate, goBack, canGoBack } = useAppNavigation();
 
   return (
@@ -22,15 +37,13 @@ const ProfileView: React.FC<Props> = ({ profile, editingField, setEditingField, 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
-        keyboardVerticalOffset={90}
-      >
+        keyboardVerticalOffset={90}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ paddingBottom: 80 }}
-          showsVerticalScrollIndicator={false}
-        >
+          showsVerticalScrollIndicator={false}>
           {/* Header */}
-          <View className="px-5 py-4 flex-row justify-between items-center bg-white border-b border-gray-100">
+          <View className="flex-row items-center justify-between border-b border-gray-100 bg-white px-5 py-4">
             {canGoBack ? (
               <TouchableOpacity onPress={goBack}>
                 <Text className="text-2xl">←</Text>
@@ -47,65 +60,80 @@ const ProfileView: React.FC<Props> = ({ profile, editingField, setEditingField, 
           </View>
 
           {!profile ? (
-            <View className="flex-1 justify-center items-center py-20">
+            <View className="flex-1 items-center justify-center py-20">
               <Text className="text-gray-500">Chargement...</Text>
             </View>
           ) : (
             <>
               {/* Profile Picture */}
-              <View className="mt-8 mb-8 items-center">
+              <View className="mb-8 mt-8 items-center">
                 <Image
                   source={{ uri: profile.profile_pic_url }}
-                  className="w-32 h-32 rounded-full bg-gray-200"
+                  className="h-32 w-32 rounded-full bg-gray-200"
                   onError={() => console.warn('Image non chargée')}
                 />
               </View>
 
               {/* Stats Cards */}
-              <View className="px-5 mb-8">
+              <View className="mb-8 px-5">
                 {/* First Row - Level and XP */}
-                <View className="flex-row gap-3 mb-3">
+                <View className="mb-3 flex-row gap-3">
                   {/* Level Card */}
-                  <View className="flex-1 bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-                    <Text className="text-xs text-gray-500 font-semibold uppercase mb-1">Niveau</Text>
+                  <View className="flex-1 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+                    <Text className="mb-1 text-xs font-semibold uppercase text-gray-500">
+                      Niveau
+                    </Text>
                     <Text className="text-3xl font-extrabold text-blue-600">{profile.level}</Text>
                   </View>
 
                   {/* XP Card */}
-                  <View className="flex-1 bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-                    <Text className="text-xs text-gray-500 font-semibold uppercase mb-1">Expérience</Text>
+                  <View className="flex-1 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+                    <Text className="mb-1 text-xs font-semibold uppercase text-gray-500">
+                      Expérience
+                    </Text>
                     <Text className="text-2xl font-bold text-gray-900">{profile.xp}</Text>
                     <Text className="text-xs text-gray-400">XP</Text>
                   </View>
                 </View>
 
                 {/* Completed Activities Card */}
-                <View className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-                  <Text className="text-xs text-gray-500 font-semibold uppercase mb-1">Activités complétées</Text>
-                  <Text className="text-2xl font-bold text-gray-900">{profile.completedActivityIds.length}</Text>
+                <View className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+                  <Text className="mb-1 text-xs font-semibold uppercase text-gray-500">
+                    Activités complétées
+                  </Text>
+                  <Text className="text-2xl font-bold text-gray-900">
+                    {profile.completedActivityIds.length}
+                  </Text>
                 </View>
               </View>
 
               {/* Editable Profile Fields */}
-              <View className="px-5 space-y-4">
-                <Text className="text-lg font-bold text-gray-900 mb-4">Informations personnelles</Text>
+              <View className="space-y-4 px-5">
+                <Text className="mb-4 text-lg font-bold text-gray-900">
+                  Informations personnelles
+                </Text>
                 {profileFields.map((profileField) => (
-                  <View key={profileField.key} className="bg-white rounded-xl p-4 border border-gray-100">
-                    <View className="flex-row justify-between items-center mb-2">
-                      <Text className="text-sm text-gray-500 font-semibold uppercase">{profileField.label}</Text>
+                  <View
+                    key={profileField.key}
+                    className="rounded-xl border border-gray-100 bg-white p-4">
+                    <View className="mb-2 flex-row items-center justify-between">
+                      <Text className="text-sm font-semibold uppercase text-gray-500">
+                        {profileField.label}
+                      </Text>
                       <TouchableOpacity
                         onPress={() => {
                           setTempValue(String(profile[profileField.key]));
-                          setEditingField(editingField === profileField.key ? null : profileField.key);
-                        }}
-                      >
+                          setEditingField(
+                            editingField === profileField.key ? null : profileField.key
+                          );
+                        }}>
                         <Text className="text-lg">✏️</Text>
                       </TouchableOpacity>
                     </View>
 
                     {editingField === profileField.key ? (
                       <TextInput
-                        className="border border-blue-300 rounded-lg px-3 py-2 text-gray-900"
+                        className="rounded-lg border border-blue-300 px-3 py-2 text-gray-900"
                         value={tempValue}
                         onChangeText={setTempValue}
                         returnKeyType="done"
@@ -116,7 +144,7 @@ const ProfileView: React.FC<Props> = ({ profile, editingField, setEditingField, 
                         }}
                       />
                     ) : (
-                      <Text className="text-gray-900 font-medium">{profile[profileField.key]}</Text>
+                      <Text className="font-medium text-gray-900">{profile[profileField.key]}</Text>
                     )}
                   </View>
                 ))}

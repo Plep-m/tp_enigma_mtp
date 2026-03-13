@@ -4,14 +4,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import QRScanner from '../components/QRScanner';
 import { Activity, Step, Mission } from '../models/activity';
 import { useAppNavigation } from '../navigation/StackNavigator';
-import { impactAsync, ImpactFeedbackStyle, notificationAsync, NotificationFeedbackType } from 'expo-haptics';
+import {
+  impactAsync,
+  ImpactFeedbackStyle,
+  notificationAsync,
+  NotificationFeedbackType,
+} from 'expo-haptics';
 import { useMissionCardKeyboardScroll } from '../hooks/useMissionCardKeyboardScroll';
 import {
   AdminHeader,
   AdminActivityFields,
   AdminStepsSection,
   AdminQRSection,
-  AdminQRControls
+  AdminQRControls,
 } from '../components/admin';
 
 type Props = {
@@ -65,14 +70,17 @@ const AdminView: React.FC<Props> = ({
     if (!activity) return;
     onUpdateActivity({
       ...activity,
-      steps: [...activity.steps, {
-        id: Date.now(),
-        description: '',
-        poiLat: 0,
-        poiLng: 0,
-        radius: 50,
-        missions: []
-      }]
+      steps: [
+        ...activity.steps,
+        {
+          id: Date.now(),
+          description: '',
+          poiLat: 0,
+          poiLng: 0,
+          radius: 50,
+          missions: [],
+        },
+      ],
     });
   };
 
@@ -80,7 +88,7 @@ const AdminView: React.FC<Props> = ({
     if (!activity) return;
     onUpdateActivity({
       ...activity,
-      steps: activity.steps.filter((_, i) => i !== stepIndex)
+      steps: activity.steps.filter((_, i) => i !== stepIndex),
     });
   };
 
@@ -98,13 +106,16 @@ const AdminView: React.FC<Props> = ({
     const newSteps = [...activity.steps];
     newSteps[stepIndex] = {
       ...newSteps[stepIndex],
-      missions: [...newSteps[stepIndex].missions, {
-        id: Date.now(),
-        type: 'photo',
-        instruction: '',
-        question: '',
-        expectedAnswer: ''
-      }]
+      missions: [
+        ...newSteps[stepIndex].missions,
+        {
+          id: Date.now(),
+          type: 'photo',
+          instruction: '',
+          question: '',
+          expectedAnswer: '',
+        },
+      ],
     };
     onUpdateActivity({ ...activity, steps: newSteps });
   };
@@ -114,7 +125,7 @@ const AdminView: React.FC<Props> = ({
     const newSteps = [...activity.steps];
     newSteps[stepIndex] = {
       ...newSteps[stepIndex],
-      missions: newSteps[stepIndex].missions.filter((_, i) => i !== missionIndex)
+      missions: newSteps[stepIndex].missions.filter((_, i) => i !== missionIndex),
     };
     onUpdateActivity({ ...activity, steps: newSteps });
   };
@@ -122,19 +133,17 @@ const AdminView: React.FC<Props> = ({
   return (
     <SafeAreaView className="flex-1 bg-white">
       <AdminHeader canGoBack={canGoBack} onGoBack={goBack} />
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={0}
-      >
+        keyboardVerticalOffset={0}>
         <ScrollView
           ref={scrollViewRef}
           className="flex-1 px-4 py-6"
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ paddingBottom: 100 }}
           onScroll={handleScroll}
-          scrollEventThrottle={16}
-        >
+          scrollEventThrottle={16}>
           <AdminQRControls
             onStartScanning={onStartScanning}
             onCreateBlank={onCreateBlank}
@@ -171,7 +180,7 @@ const AdminView: React.FC<Props> = ({
           )}
           {!activity && (
             <View className="py-12">
-              <Text className="text-gray-400 text-center text-base">
+              <Text className="text-center text-base text-gray-400">
                 Scan or create an activity to get started
               </Text>
             </View>

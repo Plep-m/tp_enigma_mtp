@@ -54,8 +54,7 @@ const PlayActivityView: React.FC<Props> = ({
       <StatusBar barStyle="dark-content" />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1"
-      >
+        className="flex-1">
         {/* Header */}
         <PlayHeader
           stepIndex={stepIndex}
@@ -64,10 +63,7 @@ const PlayActivityView: React.FC<Props> = ({
         />
 
         {/* Content */}
-        <ScrollView
-          className="flex-1 px-5 py-6"
-          contentContainerStyle={{ paddingBottom: 40 }}
-        >
+        <ScrollView className="flex-1 px-5 py-6" contentContainerStyle={{ paddingBottom: 40 }}>
           {/* Live Map Card */}
           <View className="mb-6">
             <LiveMapCard
@@ -77,12 +73,10 @@ const PlayActivityView: React.FC<Props> = ({
           </View>
 
           {/* Step Info */}
-          <Text className="text-gray-500 mb-2 uppercase tracking-wider text-xs font-bold">
+          <Text className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">
             Lieu à rejoindre
           </Text>
-          <Text className="text-3xl text-gray-900 font-bold mb-8">
-            {currentStep.description}
-          </Text>
+          <Text className="mb-8 text-3xl font-bold text-gray-900">{currentStep.description}</Text>
 
           {/* Mission Card */}
           <PlayMissionCard

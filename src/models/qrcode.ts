@@ -33,7 +33,7 @@ const KEY_MAP: Record<string, string> = {
   titre: 'tt',
   poi: 'p',
   condition_victoire: 'c',
-  reponse: 'r'
+  reponse: 'r',
 };
 
 const REVERSE_KEY_MAP: Record<string, string> = Object.fromEntries(
@@ -42,7 +42,7 @@ const REVERSE_KEY_MAP: Record<string, string> = Object.fromEntries(
 
 const mapKeys = (obj: any, dictionary: Record<string, string>): any => {
   if (Array.isArray(obj)) {
-    return obj.map(item => mapKeys(item, dictionary));
+    return obj.map((item) => mapKeys(item, dictionary));
   }
   if (obj !== null && typeof obj === 'object') {
     return Object.keys(obj).reduce((acc, key) => {
@@ -61,7 +61,7 @@ export const encodeActivity = (obj: object): string => {
   return base45.encode(deflatedBinary);
 };
 
-export const decodeActivity = <T,>(base45Str: string): T => {
+export const decodeActivity = <T>(base45Str: string): T => {
   const deflatedBinary = base45.decode(base45Str);
   const packedBinary = pako.inflate(deflatedBinary);
   const minifiedObj = msgpackDecode(packedBinary);

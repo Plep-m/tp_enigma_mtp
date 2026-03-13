@@ -8,5 +8,5 @@ export const createBlankActivity = (): Activity => ({
   steps: [],
   category: 'Aventure',
   duration: 30,
-  level: '1'
+  level: '1',
 });

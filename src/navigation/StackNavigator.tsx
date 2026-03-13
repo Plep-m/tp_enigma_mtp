@@ -21,7 +21,7 @@ export function useAppNavigation(): NavigationContextType {
 
 export function createNavigator<T extends ScreenMap>(
   screens: T,
-  initialScreen: keyof T & string = Object.keys(screens)[0] as keyof T & string,
+  initialScreen: keyof T & string = Object.keys(screens)[0] as keyof T & string
 ) {
   type ScreenName = keyof T & string;
 
@@ -56,19 +56,25 @@ export function createNavigator<T extends ScreenMap>(
       return () => sub.remove();
     }, [canGoBack, goBack]);
 
-    const navigateContext = useCallback((screen: string, params?: any) => {
+    const navigateContext = useCallback(
+      (screen: string, params?: any) => {
         navigate(screen as ScreenName, params);
-    }, [navigate]);
+      },
+      [navigate]
+    );
 
     return (
-      <NavigationContext.Provider value={{ navigate: navigateContext, goBack, canGoBack, params: currentStackItem?.params }}>
+      <NavigationContext.Provider
+        value={{ navigate: navigateContext, goBack, canGoBack, params: currentStackItem?.params }}>
         <SafeAreaProvider>
           {(Object.keys(screens) as ScreenName[]).map((screen) => (
             <View
               key={screen}
-              style={{ flex: 1, display: currentScreen === screen ? 'flex' : 'none' }}
-            >
-              {React.createElement(screens[screen], currentStackItem?.name === screen ? currentStackItem?.params : {})}
+              style={{ flex: 1, display: currentScreen === screen ? 'flex' : 'none' }}>
+              {React.createElement(
+                screens[screen],
+                currentStackItem?.name === screen ? currentStackItem?.params : {}
+              )}
             </View>
           ))}
         </SafeAreaProvider>

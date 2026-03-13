@@ -28,7 +28,7 @@ const MapCard: React.FC<MapCardProps> = ({ waypoints, routeCoordinates: external
   };
 
   return (
-    <View className="w-full rounded-[32px] overflow-hidden border border-gray-800 shadow-xl">
+    <View className="w-full overflow-hidden rounded-[32px] border border-gray-800 shadow-xl">
       <View className="h-72 w-full bg-gray-200">
         <MapView
           ref={mapRef}
@@ -43,8 +43,7 @@ const MapCard: React.FC<MapCardProps> = ({ waypoints, routeCoordinates: external
                   longitudeDelta: 0.05,
                 }
               : undefined
-          }
-        >
+          }>
           <Polyline
             key={`route-${route.length}`}
             coordinates={route}
@@ -56,12 +55,14 @@ const MapCard: React.FC<MapCardProps> = ({ waypoints, routeCoordinates: external
             <Marker
               key={`waypoint-${index}`}
               coordinate={point}
-              title={index === 0 ? 'Start' : index === waypoints.length - 1 ? 'End' : `Stop ${index}`}
+              title={
+                index === 0 ? 'Start' : index === waypoints.length - 1 ? 'End' : `Stop ${index}`
+              }
             />
           ))}
         </MapView>
         {isLoading && !externalRoute && (
-          <View className="absolute inset-0 bg-white/70 items-center justify-center z-10">
+          <View className="absolute inset-0 z-10 items-center justify-center bg-white/70">
             <ActivityIndicator size="large" color="#3b82f6" />
           </View>
         )}

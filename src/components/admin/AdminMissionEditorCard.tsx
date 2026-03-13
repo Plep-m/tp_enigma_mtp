@@ -21,7 +21,7 @@ const AdminMissionEditorCard: React.FC<Props> = ({
   onRemoveMission,
   onFocus,
   hapticLight,
-  hapticMedium
+  hapticMedium,
 }) => {
   const handleInputFocus = () => {
     hapticLight();
@@ -29,44 +29,38 @@ const AdminMissionEditorCard: React.FC<Props> = ({
   };
 
   return (
-    <View 
-      className="bg-white border border-gray-200 rounded p-3 mb-3"
-    >
-      {/* Mission Header */}
-      <View className="flex-row justify-between items-center mb-3">
-        <Text className="font-medium text-sm text-gray-700">Mission #{missionIndex + 1}</Text>
-        <Pressable 
+    <View className="mb-3 rounded border border-gray-200 bg-white p-3">
+      <View className="mb-3 flex-row items-center justify-between">
+        <Text className="text-sm font-medium text-gray-700">Mission #{missionIndex + 1}</Text>
+        <Pressable
           onPress={() => {
             hapticMedium();
             onRemoveMission();
           }}
-          style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
-        >
-          <Text className="text-red-600 text-xs">Remove</Text>
+          style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}>
+          <Text className="text-xs text-red-600">Remove</Text>
         </Pressable>
       </View>
 
-      {/* Mission Type */}
       <View className="mb-3">
-        <Text className="text-xs font-semibold mb-1 text-gray-600">Type</Text>
+        <Text className="mb-1 text-xs font-semibold text-gray-600">Type</Text>
         <TextInput
           value={mission.type}
           onChangeText={(text) => onUpdateMission({ ...mission, type: text as MissionType })}
           onFocus={handleInputFocus}
-          className="border border-gray-300 rounded px-3 py-2"
+          className="rounded border border-gray-300 px-3 py-2"
           placeholder="e.g. photo, quiz, text"
           returnKeyType="next"
         />
       </View>
 
-      {/* Mission Instruction */}
       <View className="mb-3">
-        <Text className="text-xs font-semibold mb-1 text-gray-600">Instruction</Text>
+        <Text className="mb-1 text-xs font-semibold text-gray-600">Instruction</Text>
         <TextInput
           value={mission.instruction}
           onChangeText={(text) => onUpdateMission({ ...mission, instruction: text })}
           onFocus={handleInputFocus}
-          className="border border-gray-300 rounded px-3 py-2"
+          className="rounded border border-gray-300 px-3 py-2"
           placeholder="Task instructions"
           multiline
           numberOfLines={2}
@@ -74,14 +68,13 @@ const AdminMissionEditorCard: React.FC<Props> = ({
         />
       </View>
 
-      {/* Mission Question (optional) */}
       <View className="mb-3">
-        <Text className="text-xs font-semibold mb-1 text-gray-600">Question (optional)</Text>
+        <Text className="mb-1 text-xs font-semibold text-gray-600">Question (optional)</Text>
         <TextInput
           value={mission.question || ''}
           onChangeText={(text) => onUpdateMission({ ...mission, question: text })}
           onFocus={handleInputFocus}
-          className="border border-gray-300 rounded px-3 py-2"
+          className="rounded border border-gray-300 px-3 py-2"
           placeholder="Question for quiz, etc."
           multiline
           numberOfLines={2}
@@ -89,14 +82,13 @@ const AdminMissionEditorCard: React.FC<Props> = ({
         />
       </View>
 
-      {/* Mission Expected Answer (optional) */}
       <View>
-        <Text className="text-xs font-semibold mb-1 text-gray-600">Expected Answer (optional)</Text>
+        <Text className="mb-1 text-xs font-semibold text-gray-600">Expected Answer (optional)</Text>
         <TextInput
           value={mission.expectedAnswer || ''}
           onChangeText={(text) => onUpdateMission({ ...mission, expectedAnswer: text })}
           onFocus={handleInputFocus}
-          className="border border-gray-300 rounded px-3 py-2"
+          className="rounded border border-gray-300 px-3 py-2"
           placeholder="Expected answer"
           returnKeyType="done"
         />

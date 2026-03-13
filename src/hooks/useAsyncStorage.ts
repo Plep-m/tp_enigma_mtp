@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const useAsyncStorage = <T,>(key: string, initialValue: T) => {
+export const useAsyncStorage = <T>(key: string, initialValue: T) => {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
+  const storedValueRef = useRef<T>(initialValue);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -10,13 +11,19 @@ export const useAsyncStorage = <T,>(key: string, initialValue: T) => {
     loadStoredValue();
   }, [key]);
 
+  useEffect(() => {
+    storedValueRef.current = storedValue;
+  }, [storedValue]);
+
   const loadStoredValue = async () => {
     try {
       setLoading(true);
       setError(null);
       const item = await AsyncStorage.getItem(key);
       if (item !== null) {
-        setStoredValue(JSON.parse(item));
+        const parsed = JSON.parse(item);
+        setStoredValue(parsed);
+        storedValueRef.current = parsed;
       }
     } catch (err) {
       setError('Failed to load data');
@@ -26,21 +33,27 @@ export const useAsyncStorage = <T,>(key: string, initialValue: T) => {
     }
   };
 
-  const setValue = useCallback(async (value: T) => {
-    try {
-      setError(null);
-      setStoredValue(value);
-      await AsyncStorage.setItem(key, JSON.stringify(value));
-    } catch (err) {
-      setError('Failed to save data');
-      console.error('Error saving to AsyncStorage:', err);
-    }
-  }, [key]);
+  const setValue = useCallback(
+    async (value: T | ((val: T) => T)) => {
+      try {
+        setError(null);
+        const newValue = value instanceof Function ? value(storedValueRef.current) : value;
+        setStoredValue(newValue);
+        storedValueRef.current = newValue;
+        await AsyncStorage.setItem(key, JSON.stringify(newValue));
+      } catch (err) {
+        setError('Failed to save data');
+        console.error('Error saving to AsyncStorage:', err);
+      }
+    },
+    [key]
+  );
 
   const removeValue = useCallback(async () => {
     try {
       setError(null);
       setStoredValue(initialValue);
+      storedValueRef.current = initialValue;
       await AsyncStorage.removeItem(key);
     } catch (err) {
       setError('Failed to remove data');
@@ -58,6 +71,6 @@ export const useAsyncStorage = <T,>(key: string, initialValue: T) => {
     removeValue,
     refresh,
     loading,
-    error
+    error,
   };
 };

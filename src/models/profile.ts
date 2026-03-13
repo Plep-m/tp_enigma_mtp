@@ -9,4 +9,3 @@ export type ProfileModel = {
   level: number;
   completedActivityIds: number[];
 };
-

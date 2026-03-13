@@ -9,9 +9,9 @@ import { useProfile } from '../hooks/useProfile';
 const PlayActivityController: React.FC = () => {
   const { params, navigate } = useAppNavigation();
   const { addXp, completeActivity } = useProfile();
-  
+
   const activity = params?.activity as Activity;
-  
+
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [currentMissionIndex, setCurrentMissionIndex] = useState(0);
   const [feedback, setFeedback] = useState<string | null>(null);
@@ -41,7 +41,7 @@ const PlayActivityController: React.FC = () => {
         );
       } catch (error) {
         console.error('[PlayActivityController] Location initialization error:', error);
-        Alert.alert('Erreur GPS', 'Impossible d\'initialiser le GPS.');
+        Alert.alert('Erreur GPS', "Impossible d'initialiser le GPS.");
       }
     };
 
@@ -66,12 +66,7 @@ const PlayActivityController: React.FC = () => {
    * Calculate distance between two coordinates using Haversine formula
    * Returns distance in meters
    */
-  const calculateDistance = (
-    lat1: number,
-    lon1: number,
-    lat2: number,
-    lon2: number
-  ): number => {
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371000; // Earth radius in meters
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;
@@ -172,7 +167,7 @@ const PlayActivityController: React.FC = () => {
       const answerValid = checkVictoryCondition(answer);
       if (!answerValid) {
         setFeedback('❌ Mauvaise réponse ! Essaie encore.');
-        Alert.alert('Incorrect', 'Ce n\'est pas la bonne réponse.');
+        Alert.alert('Incorrect', "Ce n'est pas la bonne réponse.");
         return;
       }
 
@@ -189,33 +184,29 @@ const PlayActivityController: React.FC = () => {
 
   const advance = () => {
     const hasNextMission = currentMissionIndex + 1 < currentStep.missions.length;
-    
+
     if (hasNextMission) {
-        setCurrentMissionIndex(currentMissionIndex + 1);
+      setCurrentMissionIndex(currentMissionIndex + 1);
     } else {
-        // Step complete
-        const hasNextStep = currentStepIndex + 1 < activity.steps.length;
-        if (hasNextStep) {
-            Alert.alert("Étape terminée !", "En route pour la suivante.");
-            setCurrentStepIndex(currentStepIndex + 1);
-            setCurrentMissionIndex(0);
-        } else {
-            // Activity complete
-            finishActivity();
-        }
+      // Step complete
+      const hasNextStep = currentStepIndex + 1 < activity.steps.length;
+      if (hasNextStep) {
+        Alert.alert('Étape terminée !', 'En route pour la suivante.');
+        setCurrentStepIndex(currentStepIndex + 1);
+        setCurrentMissionIndex(0);
+      } else {
+        // Activity complete
+        finishActivity();
+      }
     }
   };
 
   const finishActivity = async () => {
     await addXp(100); // 100 XP per activity
     await completeActivity(activity.id);
-    Alert.alert(
-        "Félicitations ! 🏆",
-        "Tu as terminé cette activité et gagné 100 XP !",
-        [
-            { text: "Retour à l'accueil", onPress: () => navigate('App') }
-        ]
-    );
+    Alert.alert('Félicitations ! 🏆', 'Tu as terminé cette activité et gagné 100 XP !', [
+      { text: "Retour à l'accueil", onPress: () => navigate('App') },
+    ]);
   };
 
   /**

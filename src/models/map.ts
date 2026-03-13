@@ -16,11 +16,9 @@ export type LiveRouteResult = {
   instruction: Instruction | null;
 };
 
-const getBaseUrl = () =>
-  process.env.EXPO_PUBLIC_OSRM_BASE_URL || 'https://osrm.plep-lab.com';
+const getBaseUrl = () => process.env.EXPO_PUBLIC_OSRM_BASE_URL || 'https://osrm.plep-lab.com';
 
-const getApiKey = () =>
-  process.env.EXPO_PUBLIC_OSRM_API_KEY || '';
+const getApiKey = () => process.env.EXPO_PUBLIC_OSRM_API_KEY || '';
 
 const MapModel = {
   async requestPermission(): Promise<boolean> {

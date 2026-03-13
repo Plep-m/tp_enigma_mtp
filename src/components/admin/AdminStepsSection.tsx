@@ -30,40 +30,42 @@ const AdminStepsSection: React.FC<Props> = ({
   stepRefs,
   missionCardRefs,
   hapticLight,
-  hapticMedium
+  hapticMedium,
 }) => {
   return (
     <View className="mb-6">
-      <View className="flex-row justify-between items-center mb-4">
+      <View className="mb-4 flex-row items-center justify-between">
         <Text className="text-xl font-bold text-gray-900">Steps</Text>
-        <Pressable 
+        <Pressable
           onPress={() => {
             hapticLight();
             onAddStep();
           }}
-          style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
-        >
-          <Text className="text-blue-600 font-semibold">+ Add Step</Text>
+          style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}>
+          <Text className="font-semibold text-blue-600">+ Add Step</Text>
         </Pressable>
       </View>
 
       {steps.length === 0 ? (
-        <View className="py-8 border border-dashed border-gray-300 rounded">
-          <Text className="text-gray-400 text-center">No steps yet. Add one to get started.</Text>
+        <View className="rounded border border-dashed border-gray-300 py-8">
+          <Text className="text-center text-gray-400">No steps yet. Add one to get started.</Text>
         </View>
       ) : (
         steps.map((step, stepIndex) => (
           <View
             key={step.id}
-            ref={(ref) => { stepRefs.current[stepIndex] = ref; }}
-          >
+            ref={(ref) => {
+              stepRefs.current[stepIndex] = ref;
+            }}>
             <AdminStepEditor
               step={step}
               stepIndex={stepIndex}
               onUpdateStep={(updatedStep) => onUpdateStep(stepIndex, updatedStep)}
               onRemoveStep={() => onRemoveStep(stepIndex)}
               onAddMission={() => onAddMission(stepIndex)}
-              onUpdateMission={(missionIndex, mission) => onUpdateMission(stepIndex, missionIndex, mission)}
+              onUpdateMission={(missionIndex, mission) =>
+                onUpdateMission(stepIndex, missionIndex, mission)
+              }
               onRemoveMission={(missionIndex) => onRemoveMission(stepIndex, missionIndex)}
               onMissionFocus={onMissionFocus}
               missionCardRefs={missionCardRefs}

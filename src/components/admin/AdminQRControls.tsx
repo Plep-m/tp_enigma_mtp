@@ -12,28 +12,26 @@ const AdminQRControls: React.FC<Props> = ({
   onStartScanning,
   onCreateBlank,
   hapticMedium,
-  hapticLight
+  hapticLight,
 }) => {
   return (
-    <View className="flex-row gap-2 mb-6">
-      <Pressable 
+    <View className="mb-6 flex-row gap-2">
+      <Pressable
         onPress={() => {
           hapticMedium();
           onStartScanning();
         }}
-        className="flex-1 bg-black py-3 rounded"
-        style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-      >
-        <Text className="text-white text-center">Scan QR</Text>
+        className="flex-1 rounded bg-black py-3"
+        style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
+        <Text className="text-center text-white">Scan QR</Text>
       </Pressable>
-      <Pressable 
+      <Pressable
         onPress={() => {
           hapticLight();
           onCreateBlank();
         }}
-        className="flex-1 border border-black py-3 rounded"
-        style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
-      >
+        className="flex-1 rounded border border-black py-3"
+        style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}>
         <Text className="text-center">New</Text>
       </Pressable>
     </View>

@@ -12,17 +12,17 @@ const PlayHeader: React.FC<Props> = ({ stepIndex, totalSteps, onDrawerOpen }) =>
   const { goBack } = useAppNavigation();
 
   return (
-    <View className="px-5 py-4 flex-row justify-between items-center bg-white border-b border-gray-100">
+    <View className="flex-row items-center justify-between border-b border-gray-100 bg-white px-5 py-4">
       <TouchableOpacity onPress={goBack} className="active:opacity-70">
-        <Text className="text-gray-700 text-lg font-semibold">← Retour</Text>
+        <Text className="text-lg font-semibold text-gray-700">← Retour</Text>
       </TouchableOpacity>
-      <View className="bg-blue-50 px-3 py-1 rounded-full">
-        <Text className="text-blue-700 font-bold text-sm">
+      <View className="rounded-full bg-blue-50 px-3 py-1">
+        <Text className="text-sm font-bold text-blue-700">
           Étape {stepIndex + 1} / {totalSteps}
         </Text>
       </View>
       <TouchableOpacity onPress={onDrawerOpen} className="active:opacity-70">
-        <Text className="text-blue-600 font-semibold text-sm">📋 Itinéraire</Text>
+        <Text className="text-sm font-semibold text-blue-600">📋 Itinéraire</Text>
       </TouchableOpacity>
     </View>
   );

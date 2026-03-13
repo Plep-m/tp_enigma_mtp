@@ -1,4 +1,13 @@
-export type MissionType = 'photo' | 'quiz' | 'math' | 'text' | 'observation' | 'action' | 'input' | 'scan' | 'gps';
+export type MissionType =
+  | 'photo'
+  | 'quiz'
+  | 'math'
+  | 'text'
+  | 'observation'
+  | 'action'
+  | 'input'
+  | 'scan'
+  | 'gps';
 
 export interface Mission {
   id: number;

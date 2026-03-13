@@ -7,7 +7,9 @@ type Props = {
 };
 
 const MapView: React.FC<Props> = ({ waypoints }) => (
-  <SafeAreaView edges={['top', 'bottom', 'left', 'right']} className="flex-1 bg-white justify-center items-center p-4">
+  <SafeAreaView
+    edges={['top', 'bottom', 'left', 'right']}
+    className="flex-1 items-center justify-center bg-white p-4">
     <MapCard waypoints={waypoints} />
   </SafeAreaView>
 );

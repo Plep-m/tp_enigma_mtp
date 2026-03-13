@@ -8,7 +8,9 @@ type Props = {
 };
 
 const LiveMapView: React.FC<Props> = ({ destination }) => (
-  <SafeAreaView edges={['top', 'bottom', 'left', 'right']} className="flex-1 bg-gray-100 justify-center items-center p-6">
+  <SafeAreaView
+    edges={['top', 'bottom', 'left', 'right']}
+    className="flex-1 items-center justify-center bg-gray-100 p-6">
     <LiveMapCard destination={destination} />
   </SafeAreaView>
 );

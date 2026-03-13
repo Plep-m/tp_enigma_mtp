@@ -26,38 +26,23 @@ const PlayItineraryDrawer: React.FC<Props> = ({
   };
 
   return (
-    <Modal
-      visible={isOpen}
-      transparent
-      animationType="fade"
-      onRequestClose={onClose}
-    >
+    <Modal visible={isOpen} transparent animationType="fade" onRequestClose={onClose}>
       <View className="flex-1 flex-row bg-black/40">
-        {/* Tap outside to close */}
-        <TouchableOpacity
-          className="flex-1"
-          activeOpacity={1}
-          onPress={onClose}
-        />
-
-        {/* Drawer Panel - Safe Area Aware */}
+        <TouchableOpacity className="flex-1" activeOpacity={1} onPress={onClose} />
         <View
           className="w-72 bg-white shadow-xl"
           style={{
             paddingTop: insets.top,
             paddingBottom: insets.bottom,
             paddingRight: insets.right,
-          }}
-        >
-          {/* Drawer Header */}
-          <View className="px-6 py-4 border-b border-gray-100 flex-row justify-between items-center">
+          }}>
+          <View className="flex-row items-center justify-between border-b border-gray-100 px-6 py-4">
             <Text className="text-xl font-bold text-gray-900">Étapes restantes</Text>
             <TouchableOpacity onPress={onClose}>
-              <Text className="text-gray-500 text-2xl">✕</Text>
+              <Text className="text-2xl text-gray-500">✕</Text>
             </TouchableOpacity>
           </View>
 
-          {/* Steps List */}
           <FlatList
             data={remainingSteps}
             keyExtractor={(item, idx) => `${item.id}-${idx}`}
@@ -69,41 +54,29 @@ const PlayItineraryDrawer: React.FC<Props> = ({
               return (
                 <TouchableOpacity
                   onPress={() => handleStepSelect(absoluteIndex)}
-                  className={`px-6 py-4 border-b border-gray-100 flex-row items-center ${
+                  className={`flex-row items-center border-b border-gray-100 px-6 py-4 ${
                     isCurrent ? 'bg-blue-50' : ''
-                  }`}
-                >
-                  {/* Step Indicator */}
+                  }`}>
                   <View
-                    className={`w-8 h-8 rounded-full items-center justify-center mr-4 ${
+                    className={`mr-4 h-8 w-8 items-center justify-center rounded-full ${
                       isCurrent ? 'bg-blue-600' : 'bg-gray-300'
-                    }`}
-                  >
+                    }`}>
                     <Text
-                      className={`font-bold text-sm ${
-                        isCurrent ? 'text-white' : 'text-gray-700'
-                      }`}
-                    >
+                      className={`text-sm font-bold ${isCurrent ? 'text-white' : 'text-gray-700'}`}>
                       {absoluteIndex + 1}
                     </Text>
                   </View>
-
-                  {/* Step Info */}
                   <View className="flex-1">
                     <Text
-                      className={`font-semibold ${
-                        isCurrent ? 'text-blue-700' : 'text-gray-900'
-                      }`}
-                    >
+                      className={`font-semibold ${isCurrent ? 'text-blue-700' : 'text-gray-900'}`}>
                       {item.description}
                     </Text>
-                    <Text className="text-xs text-gray-500 mt-1">
+                    <Text className="mt-1 text-xs text-gray-500">
                       {item.missions.length} mission{item.missions.length > 1 ? 's' : ''}
                     </Text>
                   </View>
 
-                  {/* Current Indicator */}
-                  {isCurrent && <Text className="text-blue-600 ml-2">→</Text>}
+                  {isCurrent && <Text className="ml-2 text-blue-600">→</Text>}
                 </TouchableOpacity>
               );
             }}

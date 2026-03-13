@@ -1,11 +1,11 @@
 {
-    "id": 1,
-    "profile_pic_url": "https://randomuser.me/api/portraits/men/10.jpg",
-    "username": "mtp_visitor",
-    "phone_number": "+33 6 XX XX XX XX",
-    "gender": "male",
-    "age": 25,
-    "xp": 0,
-    "level": 1,
-    "completedActivityIds": []
+  "id": 1,
+  "profile_pic_url": "https://randomuser.me/api/portraits/men/10.jpg",
+  "username": "mtp_visitor",
+  "phone_number": "+33 6 XX XX XX XX",
+  "gender": "male",
+  "age": 25,
+  "xp": 0,
+  "level": 1,
+  "completedActivityIds": []
 }
